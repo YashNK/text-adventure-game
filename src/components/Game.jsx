@@ -147,7 +147,7 @@ const Game = () => {
                 setShowPopUp(true);
               }
             } else {
-              newMessage = 'There is nothing to search here.';
+              setMessage('There is nothing to search here.');
             }
             break;
           case 'collect':
@@ -246,7 +246,7 @@ const Game = () => {
       CSHallBottom: 'You can enter the staff room, Located South-East or You can go down-stairs or up-stairs.',
       CSHallBottom2: "You're almost there. head East to enter the staff room.",
       StaffRoom: "you have entered the Staff Room. You could look around and search for items to collect.",
-      GirlsBathroom: 'I know you are the only one in the college right now but is it okay to go sneaking into the girls bathroom, if your are not a girl please leave the area you perv.',
+      GirlsBathroom: "I know you are the only one in the college right now but is it okay to go sneaking into the girls bathroom, if you're not a girl please leave the area you perv.",
     };
 
     return descriptions[room] || 'You are in an unknown place.';
@@ -282,12 +282,12 @@ const Game = () => {
             </div>
           </div>
       )}
-      <div className=' absolute flex mt-[800px] justify-center items-end mb-7'>
+      <div className=' absolute flex mt-[770px] justify-center items-end mb-7'>
           <button className='bg-white text-black pt-2 pb-2 pl-4 pr-4 rounded-3xl mr-3' onClick={handleButtonClick}>inventory</button>
           <button className='bg-white text-black pt-2 pb-2 pl-4 pr-4 rounded-3xl' onClick={handleMusic}>
           {isMusicPlaying ? 'Pause Music' : 'Play Music'}
           </button>
-          <audio ref={audioRef} src={Music} autoPlay />
+          <audio ref={audioRef} src={Music} />
         </div>
       
 
