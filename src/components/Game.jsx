@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Music from '../assets/Lord Huron  The Night We Met Official Audio.mp3'
 import wall from '../assets/wall3.jpg'
+import EnemyAttack from './EnemyAttack'
 
 const Map = ({ currentRoom }) => {
 
@@ -82,6 +83,8 @@ const Map = ({ currentRoom }) => {
       </div>
     );
   };
+
+  
   
 const Game = () => {
   const [currentRoom, setCurrentRoom] = useState('CS_S6R1');
@@ -92,6 +95,8 @@ const Game = () => {
   const [showInventory, setShowInventory] = useState(false);
   const [isMusicPlaying, setIsMusicPlaying] = useState(false);
   const audioRef = useRef(null)
+  const [enemy, setEnemy] = useState({ present: true, health: 100 });
+  const [isAttacked, setIsAttacked] = useState(false);  
 
 
   useEffect(() => {
@@ -136,6 +141,27 @@ const Game = () => {
         case 'west':
           newRoom = getExit(currentRoom, 'west');
           break;
+          
+        case 'attack':
+          if (currentRoom === 'CSHall' && enemy.present) {
+          setIsAttacked(true);
+          const newEnemyHealth = enemy.health - 10;
+          setEnemy((prevEnemy) => ({
+          ...prevEnemy,
+          health: newEnemyHealth < 0 ? 0 : newEnemyHealth,
+          }));
+          setMessage('You have killed the enemy!');
+          if (newEnemyHealth <= 0) {
+            setIsAttacked(false);
+            setEnemy({ present: false, health: 0 });
+          } else {
+            setIsAttacked(true);
+          }
+          } else {
+          setMessage('There is nothing to attack.');
+          }
+          break;
+
         case 'quit':
           setMessage('Game over. Thanks for playing!');
           break;
@@ -174,7 +200,31 @@ const Game = () => {
           break;
 
         default:
-          setMessage('Invalid command. Try again!');
+          let directionsCount = 0;
+          if (command.includes('north')) {
+            newRoom = getExit(currentRoom, 'north');
+            directionsCount = directionsCount+1;
+          }
+          if (command.includes('south')) {
+            newRoom = getExit(currentRoom, 'south');
+            directionsCount = directionsCount+1;
+          }
+          if (command.includes('east')) {
+            newRoom = getExit(currentRoom, 'east');
+            directionsCount = directionsCount+1;
+          }
+          if (command.includes('west')) {
+            newRoom = getExit(currentRoom, 'west');
+            directionsCount = directionsCount+1;
+          }
+
+          if (directionsCount === 0) {
+            setMessage('Invalid command. Try again!');
+          } else if (directionsCount > 1) {
+            setMessage('You can\'t travel in multiple directions at he same time.');
+          } else {
+            newMessage = '';
+          }
           break;
       }
 
@@ -184,6 +234,12 @@ const Game = () => {
         const [hours, minutes] = clockTime.split(':');
         let newMinutes = parseInt(minutes) + 2;
 
+        if (newRoom === 'CSHall' && enemy.present) {
+          setMessage('\nAn enemy is here!');
+        }else{
+          setMessage(getRoomDescription(newRoom));
+        }
+
         if (newMinutes >= 60) {
           const newHours = parseInt(hours) + Math.floor(newMinutes / 60);
           newMinutes = newMinutes % 60;
@@ -191,6 +247,7 @@ const Game = () => {
         } else {
           setClockTime(`${hours}:${String(newMinutes).padStart(2, '0')}`);
         }
+        
       }
 
       event.target.value = '';
@@ -234,8 +291,7 @@ const Game = () => {
     setMessage('You cannot go that way!');
     return room;
   };
-
-
+  
 
   const getRoomDescription = (room) => {
     // Define the descriptions for each room
@@ -252,6 +308,30 @@ const Game = () => {
     return descriptions[room] || 'You are in an unknown place.';
   };
 
+  const Enemy = ({ health }) => {
+    return (
+      <div className="enemy">
+        <div className="health-bar">
+          <div className="health-bar-inner" style={{ width: `${health}%` }}></div>
+        </div>
+        <p>Enemy Health: {health}</p>
+      </div>
+    );
+  };
+
+  const handleAttack = () => {
+    const newEnemyHealth = enemy.health - 10;
+    setEnemy((prevEnemy) => ({
+      ...prevEnemy,
+      health: newEnemyHealth < 0 ? 0 : newEnemyHealth,
+    }));
+    if (newEnemyHealth <= 0) {
+      setIsAttacked(false);
+    }
+  };
+
+
+
 
 
   return (
@@ -259,19 +339,32 @@ const Game = () => {
     
     <div className='absolute flex justify-center items-center flex-col w-full h-screen overflow-hidden bg-black text-slate-50'>
     
+    {isAttacked && (
+        <div className="text-white bg-black/80 w-full h-screen absolute flex flex-col justify-center items-center">
+          <div className="bg-white w-[50%] text-black text-center justify-center items-center flex flex-col h-[20%] rounded-2xl">
+            <p>The enemy is coming to attack you!</p>
+            {enemy.present && <Enemy health={enemy.health} />}
+            <button onClick={handleAttack}>Attack</button>
+          </div>
+        </div>
+      )}
+     
+
 
       {showInventory && (
         <div className="text-white bg-black/80 w-full h-screen absolute flex flex-col justify-center items-center ">
 
+        <div className='bg-white w-[50%] text-black text-center justify-center items-center flex flex-col h-[20%] rounded-2xl'>
           <h2><strong>INVENTORY</strong></h2>
           <ul>
             {inventory.map((item, index) => (
               <li key={index}>{item}</li>
             ))}
           </ul>
+          </div>
         </div>
       )}
-
+      
       {showPopUp && (
           <div className="text-black bg-black/80 w-full h-screen absolute flex flex-col justify-center items-center text-center">
             <div className='absolute bg-white w-[60%] h-[20%] flex flex-col justify-center items-center  ml-[20%] mr-[20%] rounded-2xl'>
@@ -289,8 +382,9 @@ const Game = () => {
           </button>
           <audio ref={audioRef} src={Music} />
         </div>
-      
-
+      {/* <div className='absolute lg:mb-[25%] lg:ml-[40%] mb-[90%] ml-[30%]'>
+      <img src={wall} className='object-cover lg:w-[20%] w-[60%]'/>
+      </div> */}
       <h1 className='text-[200%] mb-5'>The Haunted College</h1>
       <p className='ml-[10%] text-center mb-4 mr-[10%]'>{message}</p>
       <input type="text" className='text-black' onKeyPress={handleInput} autoFocus />
