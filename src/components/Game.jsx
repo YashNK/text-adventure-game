@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import Music from '../assets/Lord Huron  The Night We Met Official Audio.mp3'
-import wall from '../assets/wall3.jpg'
-import EnemyAttack from './EnemyAttack'
+import Music from '../assets/Lord Huron  The Night We Met Official Audio.mp3' 
+import CSHall from '../assets/CSHall.png'
+import CS_S6R1 from '../assets/CS_S6R1.png'
+import GirlsBathroom from '../assets/GirlsBathroom.png'
 
 const Map = ({ currentRoom }) => {
 
@@ -11,25 +12,39 @@ const Map = ({ currentRoom }) => {
 
         case 'CS_S6R1':
           return (
-            <pre>
+            <pre className='text-[120%]'>
               {`[ CS S6R1 ]`}
             </pre>
           );
 
         case 'CSHall':
           return (
-            <pre>
-              {`[ CS Hall - Floor 2 ] - [ CS_S6R1 ]`}
+            <>
+            <div className='flex items-center'>
+            <pre className='text-[120%]'>
+              {`[ CS Hall ]`}
             </pre>
+            <a className='text-[50%]'>
+            {'\u2190 [ CS_S6R1 ]'}
+            </a>
+            </div>
+            </>
           );
 
           case 'CSHallTop':
           return (
-            <pre>
-              {`[ CS Ha2sll - Floor 2 - Top ]
-    |
-[ CS Hall - Floor 2 ] - [ CS_S6R1 ]`}
+            <>
+            <div className=''>
+            <pre className='text-[80%]'>
+            {`[ CS Ha2sll - Floor 2 - Top ]`}
             </pre>
+            <pre className='text-[50%]'>
+{`    \u2191
+[ CS Hall - Floor 2 ] \u2190 [ CS_S6R1 ]`}
+</pre>
+            
+            </div>
+            </>
           );
 
           case 'GirlsBathroom':
@@ -41,22 +56,29 @@ const Map = ({ currentRoom }) => {
 
           case 'CSHallBottom':
           return (
-            <pre>
-              {`[ CS Hall - Floor 2 ] - [ CS_S6R1 ]
-    |
-[ CS Hall - Floor 2 - Bottom]`}
+            <>
+            <pre className='text-[60%]'>
+              {`[ CS Hall - Floor 2 ] \u2190 [ CS_S6R1 ]
+    \u2193       `}</pre>
+            <pre className='text-[160%]'>
+            {`[ CS Hall - Floor 2 - Bottom]`}
             </pre>
+            </>
           );
 
           case 'CSHallBottom2':
             return (
-              <pre>
-                {`[ CS Hall - Floor 2 ] - [ CS_S6R1 ]
-      |
+              <>      
+               <pre>
+                {`[ CS Hall - Floor 2 ] \u2190 [ CS_S6R1 ]
+      \u2193
 [ CS Hall - Floor 2 - Bottom]
-      |
-[ CS Hall - Floor 2 - Bottom]`}
+      \u2193`}
               </pre>
+              <pre className='text-[160%]'>
+            {`[ CS Hall - Floor 2 - Bottom]`}
+            </pre>
+              </>
             );
 
             case 'StaffRoom':
@@ -76,11 +98,16 @@ const Map = ({ currentRoom }) => {
     };
   
     return (
-      <div className='max-w-[100%] h-[100%] overflow-hidden text-[50%] mr-3'>
-        <h2>Map</h2>
+      <>
+      <div className='max-w-[100%] h-[100%] flex flex-col justify-center items-center'>
+        <h2 className='text-[60%]'>Map</h2>
         {renderMap(currentRoom)}
-        <p>You are currently in: {currentRoom}</p>
+        
+        <div className='absolute mt-[40%] mr-[30%]'>
+        <p className='text-center text-[60%]'>You are currently in: {currentRoom}</p>
+        </div>
       </div>
+      </>
     );
   };
 
@@ -88,15 +115,18 @@ const Map = ({ currentRoom }) => {
   
 const Game = () => {
   const [currentRoom, setCurrentRoom] = useState('CS_S6R1');
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState('\"Type Look To wake up and view Your Surroundings\"');
   const [clockTime, setClockTime] = useState('9:00');
   const [inventory, setInventory] = useState([]);
   const [showPopUp, setShowPopUp] = useState(false);
   const [showInventory, setShowInventory] = useState(false);
   const [isMusicPlaying, setIsMusicPlaying] = useState(false);
   const audioRef = useRef(null)
-  const [enemy, setEnemy] = useState({ present: true, health: 100 });
-  const [isAttacked, setIsAttacked] = useState(false);  
+  const [enemy, setEnemy] = useState({ present: true, health: 110 });
+  const [isAttacked, setIsAttacked] = useState(false); 
+  const [userHealth, setUserHealth] = useState(100);
+  const [isMapOpen, setIsMapOpen] = useState(false); 
+  
 
 
   useEffect(() => {
@@ -118,6 +148,20 @@ const Game = () => {
 
 
 
+  const Enemy = ({ health }) => {
+    return (
+      <div className="">
+        <div className='bg-gray-300 mt-2'>
+        <div className="bg-red-600 w-10 h-1" style={{ width: `${health}%` }}></div>
+        
+        </div>
+        <p>Enemy Health: {health}</p>
+      </div>
+    );
+  };
+
+
+
   const handleInput = (event) => {
 
     if (event.key === 'Enter') {
@@ -126,6 +170,7 @@ const Game = () => {
       let newMessage = '';
 
       switch (command) {
+
         case 'look':
           setMessage(getRoomDescription(currentRoom));
           break;
@@ -142,6 +187,7 @@ const Game = () => {
           newRoom = getExit(currentRoom, 'west');
           break;
           
+
         case 'attack':
           if (currentRoom === 'CSHall' && enemy.present) {
           setIsAttacked(true);
@@ -150,7 +196,7 @@ const Game = () => {
           ...prevEnemy,
           health: newEnemyHealth < 0 ? 0 : newEnemyHealth,
           }));
-          setMessage('You have killed the enemy!');
+          setMessage('I wish i didnt have to kill her, she may not have been a good teacher but... yeah some things are just wrong to do, no buts. I should probably LOOK around this place.');
           if (newEnemyHealth <= 0) {
             setIsAttacked(false);
             setEnemy({ present: false, health: 0 });
@@ -158,46 +204,52 @@ const Game = () => {
             setIsAttacked(true);
           }
           } else {
-          setMessage('There is nothing to attack.');
+          setMessage('I already killed her, what should i attack a dead body now? i should probably LOOK around to find a way out of this hell.');
           }
           break;
+
 
         case 'quit':
           setMessage('Game over. Thanks for playing!');
           break;
-          case 'search':
-            if (currentRoom === 'StaffRoom') {
-              if (inventory.includes('Question Paper')) {
-                setMessage('There is nothing to search here.');
-              } else {
-                setShowPopUp(true);
-              }
+        case 'search':
+          if (currentRoom === 'StaffRoom') {
+            if (inventory.includes('Question Paper')) {
+              setMessage('There is nothing to search here.');
+            } else {
+              setShowPopUp(true);
+            }
             } else {
               setMessage('There is nothing to search here.');
             }
             break;
-          case 'collect':
-            if (currentRoom === 'StaffRoom') {
-              if (inventory.includes('Question Paper')) {
-                setMessage('You already have a Question Paper in your inventory.');
-                setShowPopUp(false);
-              } else {
-                setInventory([...inventory, 'Question Paper']);
-                setMessage('You collected a Question Paper and it has been added it to your inventory.');
-                setShowPopUp(false);
-              }
+
+
+        case 'collect':
+          if (currentRoom === 'StaffRoom') {
+            if (inventory.includes('Question Paper')) {
+              setMessage('You already have a Question Paper in your inventory.');
+              setShowPopUp(false);
+            } else {
+              setInventory([...inventory, 'Question Paper']);
+              setMessage('You collected a Question Paper and it has been added it to your inventory.');
+              setShowPopUp(false);
+            }
             } else {
               setMessage('There is nothing to collect here.');
             }
             break;
-          case 'walk away':
-            setShowPopUp(false);
-            newMessage = 'You decided to walk away.';
-            break;
-          case 'inventory':
+        case 'walk away':
+          setShowPopUp(false);
+          newMessage = 'You decided to walk away.';
+          break;
+
+
+        case 'inventory':
           setShowInventory(!showInventory);
           newMessage = showInventory ? 'Closed inventory.' : 'Opened inventory.';
           break;
+
 
         default:
           let directionsCount = 0;
@@ -228,14 +280,15 @@ const Game = () => {
           break;
       }
 
+
       if (newRoom !== currentRoom) {
         setCurrentRoom(newRoom);
         setMessage(getRoomDescription(newRoom));
         const [hours, minutes] = clockTime.split(':');
         let newMinutes = parseInt(minutes) + 2;
 
-        if (newRoom === 'CSHall' && enemy.present) {
-          setMessage('\nAn enemy is here!');
+        if (newRoom === 'CSHall' && enemy.present === true) {
+          setMessage('\nWhat The... Is that keert... What happened to her. She looks like a freaking zombie...(Stepped on glass) Ah shit... she saw me... she\'s coming towards me, i always wanted to beat my teachers but i didnt expect things to go this way. should i ATTACK? ');
         }else{
           setMessage(getRoomDescription(newRoom));
         }
@@ -258,6 +311,25 @@ const Game = () => {
   const handleButtonClick = () => {
     setShowInventory(!showInventory);
   };
+
+  const toggleMap = () => {
+    setIsMapOpen(!isMapOpen);
+  };
+
+
+  const handleAttack = () => {
+    const newEnemyHealth = enemy.health - 10;
+    setEnemy((prevEnemy) => ({
+      ...prevEnemy,
+      health: newEnemyHealth < 0 ? 0 : newEnemyHealth,
+    }));
+    if (newEnemyHealth <= 0) {
+      setIsAttacked(false);
+      if (enemy.present && newEnemyHealth <= 0) {
+        setIsAttacked(false);
+        setEnemy({ present: false, health: 0 });
+    }
+  };}
 
 
   const handleMusic = () => {
@@ -296,39 +368,42 @@ const Game = () => {
   const getRoomDescription = (room) => {
     // Define the descriptions for each room
     const descriptions = {
-      CS_S6R1: "You are in the class CS S6R1. You woke up here after you're final exam. Whilist writing your exam you fell unconscious and woke up here. Its currently 9:00pm. You see a door towards West. ",
-      CSHall: 'You are in the CS Depts Hall. There is a door towards your East and West. You can also follow the path up north the hall or go down south the hall.',
-      CSHallTop: 'You can either go up-stairs or down-stairs from here. If neither then head back south.',
-      CSHallBottom: 'You can enter the staff room, Located South-East or You can go down-stairs or up-stairs.',
+      CS_S6R1: "Ah... What happened. Where am i. Is this my Classroom? Where is everybody? ah... My head hurts. The fuck, its 9:00 PM, HOW THE FUCK DID I EVEN GET HERE THIS FUCKING LATE? I gotta go home, i see a door to my WEST, let me check if its open.",
+      CSHall: 'Hmm, so this is what my floor looks like at night. Everything looks so... spooky. Anyway i see a door to my WEST and the door i came through, in the EAST. Should i explore the college at night or just leave this god forsaken place before another teacher decides to give me a bad grade. I could also go either SOUTH or NORTH the hall.',
+      CSHallTop: 'I\'ve never truely noticed these walls, they look so medieval, its either that or just the lack of daylight thats making it feel...different. I\'ve reached the end of this path, i could go upstairs to check if anyones here or not, actually i\'d rather not search for people after what i just witnessed. I could also go downstairs and Leave. ',
+      CSHallBottom: 'I wanna just run as fast as i can, but i cant, my legs they just dont wanna move that fast... its actually better to walk, who knows which teacher is gonna just jump out of a corner and... Wait a minute, i could take this as an opportunity, I could use the computer in the staff room to change my grades. if i remember correctly the staff room is down SOUTH.',
       CSHallBottom2: "You're almost there. head East to enter the staff room.",
       StaffRoom: "you have entered the Staff Room. You could look around and search for items to collect.",
-      GirlsBathroom: "I know you are the only one in the college right now but is it okay to go sneaking into the girls bathroom, if you're not a girl please leave the area you perv.",
+      GirlsBathroom: "God Damn it stinks here, i thought the girls bathroom was the last place to be this stinky. oh wait why am i here? if anyone sees me here, ill probably be called a prev for the rest of my life, i should head back EAST. ",
     };
 
     return descriptions[room] || 'You are in an unknown place.';
   };
 
-  const Enemy = ({ health }) => {
-    return (
-      <div className="enemy">
-        <div className="health-bar">
-          <div className="health-bar-inner" style={{ width: `${health}%` }}></div>
-        </div>
-        <p>Enemy Health: {health}</p>
-      </div>
-    );
-  };
 
-  const handleAttack = () => {
-    const newEnemyHealth = enemy.health - 10;
-    setEnemy((prevEnemy) => ({
-      ...prevEnemy,
-      health: newEnemyHealth < 0 ? 0 : newEnemyHealth,
-    }));
-    if (newEnemyHealth <= 0) {
-      setIsAttacked(false);
-    }
-  };
+  let backgroundImage;
+  switch (currentRoom) {
+    case 'CSHall':
+      backgroundImage = CSHall;
+      break;
+    case 'CS_S6R1':
+      backgroundImage = CS_S6R1;
+      break;
+    case 'GirlsBathroom':
+      backgroundImage = GirlsBathroom;
+      break;
+    case 'CSHallTop':
+      backgroundImage = CSHall;
+    break;
+    case 'CSHallBottom':
+      backgroundImage = CSHall;
+    break;
+    case 'CSHallBottom2':
+      backgroundImage = CSHall;
+    break;
+    default:
+      break;
+  }
 
 
 
@@ -337,14 +412,19 @@ const Game = () => {
   return (
     <>
     
-    <div className='absolute flex justify-center items-center flex-col w-full h-screen overflow-hidden bg-black text-slate-50'>
+    
+    <div className='absolute flex justify-center items-center flex-col w-full h-screen bg-black  text-slate-50'>
+    <div
+      className="w-[70%] bg-no-repeat h-[20%] mb-[5%]"
+      style={{ backgroundImage: `url(${backgroundImage})`, backgroundSize: 'contain' }}
+      ><h1></h1></div>
     
     {isAttacked && (
         <div className="text-white bg-black/80 w-full h-screen absolute flex flex-col justify-center items-center">
           <div className="bg-white w-[50%] text-black text-center justify-center items-center flex flex-col h-[20%] rounded-2xl">
-            <p>The enemy is coming to attack you!</p>
+            <p>kill her before she attacks you. </p>
             {enemy.present && <Enemy health={enemy.health} />}
-            <button onClick={handleAttack}>Attack</button>
+            <button className='bg-black mt-3 text-white pt-2 pb-2 pl-4 pr-4 rounded-xl mr-3' onClick={handleAttack}>Attack</button>
           </div>
         </div>
       )}
@@ -375,31 +455,48 @@ const Game = () => {
             </div>
           </div>
       )}
+
+
       <div className=' absolute flex mt-[770px] justify-center items-end mb-7'>
           <button className='bg-white text-black pt-2 pb-2 pl-4 pr-4 rounded-3xl mr-3' onClick={handleButtonClick}>inventory</button>
           <button className='bg-white text-black pt-2 pb-2 pl-4 pr-4 rounded-3xl' onClick={handleMusic}>
           {isMusicPlaying ? 'Pause Music' : 'Play Music'}
           </button>
           <audio ref={audioRef} src={Music} />
-        </div>
+      </div>
+
+
       {/* <div className='absolute lg:mb-[25%] lg:ml-[40%] mb-[90%] ml-[30%]'>
       <img src={wall} className='object-cover lg:w-[20%] w-[60%]'/>
       </div> */}
-      <h1 className='text-[200%] mb-5'>The Haunted College</h1>
-      <p className='ml-[10%] text-center mb-4 mr-[10%]'>{message}</p>
-      <input type="text" className='text-black' onKeyPress={handleInput} autoFocus />
+       
+      <div className='mb-14 flex items-center flex-col'>
+      <h1 className='text-[200%]'>The Haunted College</h1>
+      <p className='lg:ml-[30%] lg:mr-[30%] ml-[10%] text-center mb-4 mr-[10%]'>{message}</p>
+      <input type="text" placeholder='Look | Search | North | South | East | West | ETC' className='text-black lg:w-[15%]' onKeyPress={handleInput} autoFocus />
+      </div>
 
-      <div className='mt-5'>
+      {/* <div className='mt-5'>
         <h1 className=''>Options: Look | Search | North | South | East | West</h1>
-        </div>
+        </div> */}
         
     </div>
-    
 
-    <div className=' flex flex-col items-end w-full h-[20%] absolute text-white'>
-      <p className='mr-9 text-[50%]'>Current Time: {clockTime}</p>
-      <Map className='' currentRoom={currentRoom} />
+    
+    
+    {isMapOpen && (
+    <div className=' flex flex-col justify-center items-end w-full h-[30%] absolute text-white'>
+      <p className='flex justify-end mt-14 mr-5 w-full text-[60%]'>Current Time: {clockTime}</p>
+      <div className='bg-gray-800/50 w-[65%] h-[120%] items-center mr-5'>
+      <Map currentRoom={currentRoom} />
+      </div>
     </div>
+    )}
+
+<div className='w-full absolute flex justify-end'>
+    <button className='bg-white text-black pt-1 pb-1 pl-2 pr-2 mt-4 rounded-3xl mr-3' onClick={toggleMap}>{isMapOpen ? 'Close Map' : 'Open Map'}</button>
+    </div>
+    
     
 </>
   );
