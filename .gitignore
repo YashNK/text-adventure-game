@@ -2,6 +2,7 @@
 
 # dependencies
 /node_modules
+/src/containers/game
 /.pnp
 .pnp.js
 

@@ -1,15 +1,11 @@
-input::placeholder{
-    font-size: 60%;
-    text-align: center;
+* {
+  font-family: "CustomFont";
 }
-
-*{
-    font-family: "CustomFont";
-    
-  }
-  
-  
-  @font-face {
-    font-family: "CustomFont";
-    src: url(../public/fonts/ProductSans-Medium.woff);
-  }
+@font-face {
+  font-family: "CustomFont";
+  src: url(../public/fonts/ProductSans-Medium.woff);
+}
+.primary_btn {
+  padding: 10px 30px;
+  border-radius: 10px;
+}
