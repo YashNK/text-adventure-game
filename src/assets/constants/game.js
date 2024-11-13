@@ -2,28 +2,29 @@ export const GameData = [
   {
     storyId: 1,
     storyTitle: "Haunted Office",
-    storyDescription:
-      "Max, a web developer, works late on the 21st floor. Strange figures lurk inside as the city below falls silent.",
+    storyDescription: `Hello Max, loyal servant of FinTech, does working late, alone, at the top most floor of your building not scare you? Aren't you afraid of whats lurking outside.
+    Well tonight is not gonna be like most nights, this night might as well be your last night...
+    Who am I you ask, well consider me as your only ray of hope to get pass, well... corporate HELL. Ill be guiding you through each floor of your building, don't consider me as a merciful companion, I wont be taking any sides, its your journey, your hell, I'm just here to make sure you don't get lost in the chaos. My name is Echo.`,
     chapters: [
       {
         chapterId: 1,
-        chapterTitle: "The Outbreak",
-        chapterDescription: "Zombies? Is this real?",
+        chapterTitle: "Production Failed.",
+        chapterDescription: "Lifeless Life.",
         isCompleted: false,
         isActive: true,
         levels: [
           {
             levelId: 1,
             levelTitle: "21st Floor",
-            levelMessage: "Alone and surrounded by chaos.",
+            levelMessage: "Alone And Alive.",
             scene: [
               {
                 sceneId: 1,
                 sceneMessage:
-                  "You step out of your cubicle. The lights flicker, and growls echo from afar. Something isn’t right.",
+                  "Working late as usual I see, say max, how does it feel to be all alone in a office? Is working this much really necessary? Look out your window for a change.",
                 sceneOptions: [
                   {
-                    look: "A dark corridor ahead, flickering lights and empty cubicles. The air is thick with dust.",
+                    look: "Looking outside the window, You see the pretty lights of tokyo city. Life is really beautiful Max, you should spend it outside at times.",
                     west: 2,
                     north: 4,
                     attack: [
@@ -214,4 +215,3 @@ export const GameData = [
     ],
   },
 ];
- 

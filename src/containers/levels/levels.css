@@ -3,7 +3,6 @@
   background-color: rgb(15, 123, 54);
   border-radius: 2px;
 }
-
 .conversation-log::-webkit-scrollbar-thumb {
   border-radius: 2px;
   background-color: rgb(40, 177, 90);

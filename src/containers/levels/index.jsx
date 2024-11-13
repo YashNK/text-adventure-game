@@ -1,34 +1,31 @@
-import React, { useState, useEffect, useRef } from "react";
-import {
-  currentLevelId,
-  currentSceneId as initialSceneId,
-  setLocalStorageValue,
-  useLevelData,
-} from "../../assets/constants/userDetails";
+import React, { useState, useRef, useEffect } from "react";
+import { GameData } from "../../assets/constants/game";
 import "./levels.css";
 
 export const Levels = () => {
-  const { level } = useLevelData();
+  const GameState = JSON.parse(localStorage.getItem("GAME_DATA"));
+  const chapter = GameData[0]?.chapters.find(
+    (ch) => ch.chapterId === GameState.chapterId
+  );
+  const level = chapter?.levels.find(
+    (lvl) => lvl.levelId === GameState.levelId
+  );
   const [gameState, setGameState] = useState({
-    currentSceneId: initialSceneId,
+    chapterId: GameState.chapterId,
+    levelId: GameState.levelId,
+    sceneId: 1,
     userInput: "",
     monsterHealth: null,
     conversationLog: [],
   });
+  const currentScene = level?.scene.find(
+    (scene) => scene.sceneId === gameState.sceneId
+  );
   const logEndRef = useRef(null);
-
-  useEffect(() => {
-    setLocalStorageValue("SCENE", gameState.currentSceneId);
-    setLocalStorageValue("LEVEL", currentLevelId);
-  }, [gameState.currentSceneId]);
 
   useEffect(() => {
     logEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [gameState.conversationLog]);
-
-  const currentScene = level?.scene.find(
-    (scene) => scene.sceneId === gameState.currentSceneId
-  );
 
   useEffect(() => {
     if (currentScene) {
@@ -36,7 +33,7 @@ export const Levels = () => {
         ...prevState,
         conversationLog: [
           ...prevState.conversationLog,
-          `Game: ${currentScene.sceneMessage}`,
+          `Echo: ${currentScene.sceneMessage}`,
         ],
       }));
     }
@@ -52,7 +49,7 @@ export const Levels = () => {
   const handleLook = () => {
     const lookOption = currentScene?.sceneOptions.find((opt) => opt.look);
     addToConversationLog(
-      `You: look\nGame: ${lookOption?.look || "Nothing of interest here."}`
+      `You: look\nEcho: ${lookOption?.look || "Nothing of interest here."}`
     );
   };
 
@@ -63,11 +60,11 @@ export const Levels = () => {
     if (directionOption) {
       setGameState((prevState) => ({
         ...prevState,
-        currentSceneId: directionOption[direction],
+        sceneId: directionOption[direction],
       }));
     } else {
       addToConversationLog(
-        `You: go ${direction}\nGame: You can't go that way.`
+        `You: go ${direction}\nEcho: You can't go that way.`
       );
     }
   };
@@ -75,29 +72,28 @@ export const Levels = () => {
   const handleAttack = () => {
     const attackOption = currentScene?.sceneOptions.find((opt) => opt.attack);
     if (!attackOption)
-      return addToConversationLog("Game: Nothing to attack here.");
-
+      return addToConversationLog("Echo: Nothing to attack here.");
     const { monsterName = "The monster", monsterHealth: initialHealth } =
       attackOption.attack[0];
-
     setGameState((prevState) => {
+      if (prevState.monsterHealth <= 0) {
+        return prevState;
+      }
       const newMonsterHealth =
         prevState.monsterHealth === null
           ? initialHealth
           : prevState.monsterHealth - 10;
-
       return {
         ...prevState,
-        monsterHealth: newMonsterHealth <= 0 ? 0 : newMonsterHealth,
+        monsterHealth: newMonsterHealth < 0 ? 0 : newMonsterHealth,
         conversationLog: [
           ...prevState.conversationLog,
-          `You: attack\nGame: You attack ${monsterName}! It now has ${newMonsterHealth} health remaining.`,
+          `You: attack\nEcho: You attack ${monsterName}! It now has ${newMonsterHealth} health remaining.`,
         ],
       };
     });
-
     if (gameState.monsterHealth <= 0 && gameState.monsterHealth !== null) {
-      addToConversationLog(`Game: ${monsterName} has been defeated!`);
+      addToConversationLog(`Echo: ${monsterName} has been defeated!`);
     }
   };
 
@@ -106,33 +102,41 @@ export const Levels = () => {
     if (fleeOption) {
       setGameState((prevState) => ({
         ...prevState,
-        currentSceneId: fleeOption.flee,
+        sceneId: fleeOption.flee,
         conversationLog: [
           ...prevState.conversationLog,
-          "You: flee\nGame: You fled the scene!",
+          "You: flee\nEcho: You fled the scene!",
         ],
       }));
     } else {
-      addToConversationLog("You: flee\nGame: No need to flee.");
+      addToConversationLog("You: flee\nEcho: No need to flee.");
     }
   };
 
-  const handleNewChapter = (command) => {
+  const handleNewChapter = () => {
     const newChapterOption = currentScene?.sceneOptions.find(
       (opt) => opt.startNewChapter
     );
     if (newChapterOption) {
-      setLocalStorageValue("CHAPTER", 2);
+      localStorage.setItem(
+        "GAME_DATA",
+        JSON.stringify({
+          chapterId: GameState.chapterId + 1,
+          levelId: 1,
+        })
+      );
       setGameState({
-        currentSceneId: initialSceneId,
+        chapterId: GameState.chapterId,
+        levelId: 1,
+        sceneId: 1,
         userInput: "",
         monsterHealth: null,
         conversationLog: [],
       });
-      addToConversationLog("Game: You have started Chapter 2!");
+      addToConversationLog("Echo: You have started Chapter 2!");
     } else {
       addToConversationLog(
-        "You: start new chapter\nGame: This option is not available in the current scene."
+        "You: start new chapter\nEcho: This option is not available in the current scene."
       );
     }
   };
@@ -144,7 +148,7 @@ export const Levels = () => {
     south: () => handleMove("south"),
     north: () => handleMove("north"),
     attack: handleAttack,
-    "start new chapter": () => handleNewChapter("start new chapter"),
+    start: () => handleNewChapter("start"),
     flee: handleFlee,
   };
 
@@ -157,7 +161,7 @@ export const Levels = () => {
       commandMap[commandHandler]();
     } else {
       addToConversationLog(
-        "Game: Invalid command. Try 'look', 'go west', 'attack', etc."
+        "Echo: Invalid command. Try 'look', 'go west', 'attack', etc."
       );
     }
     setGameState((prevState) => ({ ...prevState, userInput: "" }));
@@ -176,11 +180,19 @@ export const Levels = () => {
         {gameState.conversationLog
           .slice()
           .reverse()
-          .map((entry, index) => (
-            <div key={index} className="text-sm whitespace-pre-line">
-              {entry}
-            </div>
-          ))}
+          .map((entry, index) => {
+            const [youPart, echoPart] = entry.split("\n", 2);
+            return (
+              <div key={index} className="text-sm whitespace-pre-line">
+                {youPart.includes("You") ? (
+                  <div className="text-green-200 pt-3">{youPart}</div>
+                ) : (
+                  <div className="text-green-500">{youPart}</div>
+                )}
+                {echoPart && <span className="text-green-500">{echoPart}</span>}
+              </div>
+            );
+          })}
       </div>
       <div className="mt-2">
         {gameState.monsterHealth !== null && (
@@ -190,7 +202,6 @@ export const Levels = () => {
           </div>
         )}
         <input
-          autoFocus
           type="text"
           className="w-full p-2 bg-gray-800 text-green-500 rounded border border-gray-700 placeholder-green-700 focus:outline-none focus:ring-2 focus:ring-green-600"
           placeholder="Type a command (e.g., 'look', 'go west', 'attack')"

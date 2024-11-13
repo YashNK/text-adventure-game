@@ -1,12 +1,17 @@
 import { useNavigate } from "react-router-dom";
 import { GameData } from "../../assets/constants/game";
-import { setLocalStorageValue } from "../../assets/constants/userDetails";
 
 export const Chapters = () => {
   const navigate = useNavigate();
 
-  const handleChapterSelect = (id) => {
-    setLocalStorageValue("CHAPTER", id);
+  const handleChapterSelect = (chapter) => {
+    localStorage.setItem(
+      "GAME_DATA",
+      JSON.stringify({
+        chapterId: chapter.chapterId,
+        levelId: chapter.levels[0].levelId,
+      })
+    );
     navigate("/level");
   };
 
@@ -15,31 +20,14 @@ export const Chapters = () => {
       <div className="pb-3 text-green-400">Chapters</div>
       <div className="chapters_container">
         {GameData[0].chapters.map((chapter) => (
-          <div>
+          <div key={chapter.chapterId}>
             <button
-              disabled={!chapter.isActive}
-              onClick={() => handleChapterSelect(chapter.chapterId)}
-              className={`w-full text-start p-3 mb-3 rounded-lg ${
-                !chapter.isActive
-                  ? "bg-gray-900 cursor-not-allowed"
-                  : "bg-gray-800 cursor-pointer"
-              }`}
+              onClick={() => handleChapterSelect(chapter)}
+              className="w-full text-start p-3 mb-3 rounded-lg bg-gray-800 cursor-pointer"
               key={chapter.chapterId}
             >
-              <div
-                className={`${
-                  !chapter.isActive ? "text-green-900" : "text-green-500"
-                }`}
-              >
-                {chapter.chapterTitle}
-              </div>
-              <div
-                className={`${
-                  !chapter.isActive ? "text-green-900" : "text-green-300"
-                }`}
-              >
-                {chapter.chapterDescription}
-              </div>
+              <div className="text-green-500">{chapter.chapterTitle}</div>
+              <div className="text-green-300">{chapter.chapterDescription}</div>
             </button>
           </div>
         ))}
