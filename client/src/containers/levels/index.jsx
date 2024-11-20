@@ -73,25 +73,30 @@ export const Levels = () => {
     const attackOption = currentScene?.sceneOptions.find((opt) => opt.attack);
     if (!attackOption)
       return addToConversationLog("Echo: Nothing to attack here.");
+
     const { monsterName = "The monster", monsterHealth: initialHealth } =
       attackOption.attack[0];
+
     setGameState((prevState) => {
-      if (prevState.monsterHealth <= 0) {
+      if (prevState.monsterHealth === 0) {
         return prevState;
+      } else {
+        const newMonsterHealth =
+          prevState.monsterHealth === null
+            ? initialHealth
+            : prevState.monsterHealth - 10;
+
+        return {
+          ...prevState,
+          monsterHealth: newMonsterHealth < 0 ? 0 : newMonsterHealth,
+          conversationLog: [
+            ...prevState.conversationLog,
+            `You: attack\nEcho: You attack ${monsterName}! It now has ${newMonsterHealth} health remaining.`,
+          ],
+        };
       }
-      const newMonsterHealth =
-        prevState.monsterHealth === null
-          ? initialHealth
-          : prevState.monsterHealth - 10;
-      return {
-        ...prevState,
-        monsterHealth: newMonsterHealth < 0 ? 0 : newMonsterHealth,
-        conversationLog: [
-          ...prevState.conversationLog,
-          `You: attack\nEcho: You attack ${monsterName}! It now has ${newMonsterHealth} health remaining.`,
-        ],
-      };
     });
+
     if (gameState.monsterHealth <= 0 && gameState.monsterHealth !== null) {
       addToConversationLog(`Echo: ${monsterName} has been defeated!`);
     }
