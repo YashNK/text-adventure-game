@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { GameData } from "../../assets/constants/game";
+import { GameData } from "../../constants/game";
 
 export const Chapters = () => {
   const navigate = useNavigate();

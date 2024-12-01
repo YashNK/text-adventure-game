@@ -1,27 +1,28 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { Stories } from "./containers/stories";
-import { Levels } from "./containers/levels";
-import { Chapters } from "./containers/chapters";
+import { RouterProvider } from "react-router-dom";
+import { router } from "./router/router";
+import { Slide, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
-import axios from "axios";
-import { Login } from "./containers/login";
-import { Register } from "./containers/register";
-
-axios.defaults.baseURL = "http://localhost:8000";
-axios.defaults.withCredentials = true;
+import "./assets/color.css";
 
 function App() {
   return (
-    <div className="w-full p-3 h-screen bg-black text-white">
-      <BrowserRouter>
-        <Routes>
-          <Route path="" element={<Stories />} />
-          <Route path="/chapters" element={<Chapters />} />
-          <Route path="/level" element={<Levels />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-        </Routes>
-      </BrowserRouter>
+    <div className="h-screen bg-black text-white">
+      <ToastContainer
+        transition={Slide}
+        position="top-center"
+        autoClose={3000}
+        limit={5}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
+      <RouterProvider router={router} />
     </div>
   );
 }

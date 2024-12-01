@@ -1,0 +1,10 @@
+:root {
+  --primaryColor: #0c86c8;
+  --secondaryColor: rgb(14, 61, 72);
+  --white: #ffffff;
+  --black: #000000;
+  --gray: #838383;
+  --authInputBorderColor: #242424;
+  --error: #501f73;
+  --loaderBackground: rgba(117, 117, 117, 0.255);
+}

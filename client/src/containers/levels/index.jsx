@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { GameData } from "../../assets/constants/game";
+import { GameData } from "../../constants/game";
 import "./levels.css";
 
 export const Levels = () => {

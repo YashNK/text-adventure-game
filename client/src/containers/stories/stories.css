@@ -1,3 +1,37 @@
-.story_description {
-  max-width: 500px;
+.story_container {
+  height: 100%;
+}
+.story_card_container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  border-radius: 8px;
+  min-height: 20px;
+  overflow: auto;
+}
+.story_card_title {
+  font-size: 16px;
+  color: var(--white);
+}
+.story_card_description {
+  max-width: 700px;
+  white-space: normal;
+  max-height: 40px;
+}
+.hide_story_description {
+  overflow: hidden;
+}
+.show_full_description {
+  overflow: hidden;
+  max-height: 1000px;
+  text-overflow: ellipsis;
+}
+@media (max-width: 768px) {
+  .story_card_container {
+    flex-direction: column;
+  }
+  .story_card_description {
+    margin-bottom: 20px;
+  }
 }
