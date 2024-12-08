@@ -25,14 +25,18 @@
   }
   .skeleton_description {
     border-radius: 10px;
+    margin-bottom: 20px;
     width: 70%;
     height: 40px;
     min-width: 20px;
   }
-  .skeleton_btn {
-    width: 120px;
-    height: 36px;
-    border-radius: 10px !important;
+  .skeleton_btn_container {
+    display: flex;
+    .skeleton_btn {
+      width: 120px;
+      height: 36px;
+      border-radius: 10px !important;
+    }
   }
 }
 @keyframes pulse {
@@ -44,13 +48,14 @@
   }
 }
 @media (max-width: 768px) {
-  .skeleton-btn {
+  .skeleton_btn {
+    padding: 0px;
     width: 70px;
   }
-  .skeleton-title {
+  .skeleton_title {
     width: 40%;
   }
-  .skeleton-description {
-    width: 80%;
+  .skeleton_description {
+    width: 100% !important;
   }
 }
