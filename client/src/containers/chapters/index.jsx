@@ -1,17 +1,11 @@
 import { useNavigate } from "react-router-dom";
-import { GameData } from "../../constants/game";
+import { useFetchApi } from "../../hooks/use-fetch-api";
 
 export const Chapters = () => {
+  const { fetchData, loading } = useFetchApi();
   const navigate = useNavigate();
 
   const handleChapterSelect = (chapter) => {
-    localStorage.setItem(
-      "GAME_DATA",
-      JSON.stringify({
-        chapterId: chapter.chapterId,
-        levelId: chapter.levels[0].levelId,
-      })
-    );
     navigate("/level");
   };
 
@@ -19,18 +13,12 @@ export const Chapters = () => {
     <div className="chapters_main_container h-full">
       <div className="pb-3 text-green-400">Chapters</div>
       <div className="chapters_container">
-        {GameData[0].chapters.map((chapter) => (
-          <div key={chapter.chapterId}>
-            <button
-              onClick={() => handleChapterSelect(chapter)}
-              className="w-full text-start p-3 mb-3 rounded-lg bg-gray-800 cursor-pointer"
-              key={chapter.chapterId}
-            >
-              <div className="text-green-500">{chapter.chapterTitle}</div>
-              <div className="text-green-300">{chapter.chapterDescription}</div>
-            </button>
-          </div>
-        ))}
+        <div>
+          <button className="w-full text-start p-3 mb-3 rounded-lg bg-gray-800 cursor-pointer">
+            <div className="text-green-500">title</div>
+            <div className="text-green-300">description</div>
+          </button>
+        </div>
       </div>
     </div>
   );

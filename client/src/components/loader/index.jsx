@@ -1,4 +1,4 @@
 import React from "react";
-import "./loader.css";
+import "./loader.scss";
 
 export const Loader = () => <span className="spinner"></span>;

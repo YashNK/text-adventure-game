@@ -1,14 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Paths } from "../../constants/paths";
+import { Page } from "../../constants/routes";
 import { useFetchApi } from "../../hooks/use-fetch-api";
 import { apiRoutes } from "../../constants/api-routes";
-import { toast } from "react-toastify";
 import { Loader } from "../../components/loader";
+import I18 from "../../plugins/i18";
 
 export const Register = () => {
   const navigate = useNavigate();
-  const { fetchData, loading } = useFetchApi();
+  const { fetchData, isLoading, isSuccess, data } = useFetchApi();
   const [registerForm, setRegisterForm] = useState({
     username: "",
     password: "",
@@ -20,35 +20,31 @@ export const Register = () => {
     passwordMessage: "",
     confirmPassword: false,
   });
+  const [showPassword, setShowPassword] = useState({
+    password: false,
+    confirmPassword: false,
+  });
 
-  const handleSubmit = async (e) => {
+  useEffect(() => {
+    if (data && isSuccess) {
+      navigate(Page.LOGIN);
+    }
+  }, [data, isSuccess]);
+
+  const handleSubmit = (e) => {
     if (validateForm()) {
-      try {
-        const response = await fetchData(apiRoutes.REGISTER, "POST", {
-          username: registerForm.username.toLowerCase(),
-          password: registerForm.password,
-        });
-        if (response && response.isSuccess) {
-          navigate(Paths.LOGIN);
-        }
-      } catch (err) {
-        toast.error(err.message);
-      }
+      fetchData(apiRoutes.REGISTER, "POST", {
+        username: registerForm.username.toLowerCase(),
+        password: registerForm.password,
+      });
     }
   };
 
   const validateForm = () => {
     let valid = true;
+    const { password } = registerForm;
     if (!registerForm.username) {
       setInvalid((prev) => ({ ...prev, username: true }));
-      valid = false;
-    }
-    if (!registerForm.password) {
-      setInvalid((prev) => ({
-        ...prev,
-        password: true,
-        passwordMessage: "Password is Required",
-      }));
       valid = false;
     }
     if (!registerForm.confirmPassword) {
@@ -63,38 +59,99 @@ export const Register = () => {
       }));
       valid = false;
     }
+    if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+      setInvalid((prev) => ({
+        ...prev,
+        password: true,
+        passwordMessage:
+          "Password should contain at least one special character",
+      }));
+      return false;
+    }
+    if (!/[0-9]/.test(password)) {
+      setInvalid((prev) => ({
+        ...prev,
+        password: true,
+        passwordMessage: "Password should contain at least one number",
+      }));
+      valid = false;
+    }
+    if (!/[A-Z]/.test(password)) {
+      setInvalid((prev) => ({
+        ...prev,
+        password: true,
+        passwordMessage:
+          "Password should contain at least one uppercase character",
+      }));
+      valid = false;
+    }
+    if (!/[a-z]/.test(password)) {
+      setInvalid((prev) => ({
+        ...prev,
+        password: true,
+        passwordMessage:
+          "Password should contain at least one lowercase character",
+      }));
+      valid = false;
+    }
+    if (registerForm.password.length < 8) {
+      setInvalid((prev) => ({
+        ...prev,
+        password: true,
+        passwordMessage: "Password should contain 8 characters",
+      }));
+      valid = false;
+    }
+    if (!registerForm.password) {
+      setInvalid((prev) => ({
+        ...prev,
+        password: true,
+        passwordMessage: "Password is Required",
+      }));
+      valid = false;
+    }
     return valid;
   };
 
   return (
-    <div className="h-full flex items-center justify-around">
+    <div className="auth_form_container h-full overflow-auto flex items-center justify-around">
       <div className="auth_image_container">
-        <div className="auth_image_register" />
+        <div className="auth_image auth_image_register" />
       </div>
-      <div className="h-full flex_1_1_10 flex items-center justify-center">
-        <div className="w-[70%]">
-          <div className="text-center text-xl">Register</div>
+      <div className="flex_1_1_10 h-full overflow-auto py-5 flex my-auto items-center justify-center">
+        <div
+          onKeyDown={(e) => {
+            if (e.key === "Enter") handleSubmit();
+          }}
+          className="w-[70%] my-auto"
+        >
+          <div className="text-center text-xl">
+            <I18 tkey="REGISTER" />
+          </div>
           <div className="text-center pb-10 text-sm">
-            Embark on an Epic Adventure
+            <I18 tkey="START_YOUR_ADVENTURE" />
           </div>
           <div className="auth_input mb-8">
             <input
               type="text"
               id="username"
               className="min_width_200"
-              onChange={(e) =>
+              onChange={(e) => {
                 setRegisterForm((prev) => ({
                   ...prev,
                   username: e.target.value,
-                }))
-              }
+                }));
+                setInvalid((prev) => ({ ...prev, username: false }));
+              }}
               value={registerForm.username}
               required
             />
-            <label htmlFor="username">Username</label>
+            <label htmlFor="username">
+              <I18 tkey="USERNAME" />
+            </label>
             {invalid.username ? (
               <span className="invalid invalid_top_20 primary_color">
-                Username is required
+                <I18 tkey="USERNAME_IS_REQUIRED" />
               </span>
             ) : (
               ""
@@ -102,19 +159,22 @@ export const Register = () => {
           </div>
           <div className="auth_input mb-8">
             <input
-              type="password"
+              type={`${showPassword.password ? "text" : "password"}`}
               id="password"
               className="min_width_200"
               value={registerForm.password}
-              onChange={(e) =>
+              onChange={(e) => {
                 setRegisterForm((prev) => ({
                   ...prev,
                   password: e.target.value,
-                }))
-              }
+                }));
+                setInvalid((prev) => ({ ...prev, password: false }));
+              }}
               required
             />
-            <label htmlFor="password">Password</label>
+            <label htmlFor="password">
+              <I18 tkey="PASSWORD" />
+            </label>
             {invalid.password ? (
               <span className="invalid invalid_top_20 primary_color">
                 {invalid.passwordMessage}
@@ -126,21 +186,24 @@ export const Register = () => {
           <div className="auth_input mb-8">
             <input
               className="min_width_200"
-              type="password"
+              type={`${showPassword.confirmPassword ? "text" : "password"}`}
               id="confirm-password"
               value={registerForm.confirmPassword}
-              onChange={(e) =>
+              onChange={(e) => {
                 setRegisterForm((prev) => ({
                   ...prev,
                   confirmPassword: e.target.value,
-                }))
-              }
+                }));
+                setInvalid((prev) => ({ ...prev, confirmPassword: false }));
+              }}
               required
             />
-            <label htmlFor="confirm-password">Confirm Password</label>
+            <label htmlFor="confirm-password">
+              <I18 tkey="CONFIRM_PASSWORD" />
+            </label>
             {invalid.confirmPassword ? (
               <span className="invalid invalid_top_20 primary_color">
-                Password is required
+                <I18 tkey="PASSWORD_IS_REQUIRED" />
               </span>
             ) : (
               ""
@@ -151,19 +214,21 @@ export const Register = () => {
               className="auth_btn min_width_200"
               onClick={() => handleSubmit()}
             >
-              {loading ? (
+              {isLoading ? (
                 <>
                   <Loader />
                 </>
               ) : (
-                <span>Register</span>
+                <span>
+                  <I18 tkey="REGISTER" />
+                </span>
               )}
             </button>
           </div>
           <div className="text-center">
-            Already have an account?{" "}
-            <span className="auth_footer" onClick={() => navigate(Paths.LOGIN)}>
-              Login
+            <I18 tkey="ALREADY_HAVE_AN_ACCOUNT" />?{" "}
+            <span className="auth_footer" onClick={() => navigate(Page.LOGIN)}>
+              <I18 tkey="LOGIN" />
             </span>
           </div>
         </div>

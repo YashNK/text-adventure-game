@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { GameData } from "../../constants/game";
-import "./levels.css";
+import "./levels.scss";
 
 export const Levels = () => {
   const GameState = JSON.parse(localStorage.getItem("GAME_DATA"));

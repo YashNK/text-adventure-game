@@ -5,6 +5,10 @@ const autoIncrement = mongooseSequence(mongoose);
 
 const sceneSchema = new mongoose.Schema(
   {
+    sceneId: {
+      type: Number,
+      unique: true,
+    },
     sceneMessage: {
       type: String,
       required: true,
@@ -15,10 +19,6 @@ const sceneSchema = new mongoose.Schema(
         ref: "SceneOption",
       },
     ],
-    sceneId: {
-      type: Number,
-      unique: true,
-    },
   },
   {
     versionKey: false,

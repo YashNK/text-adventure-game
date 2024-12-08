@@ -1,14 +1,14 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Paths } from "../../constants/paths";
-import "./header.css";
+import { Page } from "../../constants/routes";
+import "./header.scss";
 
 export const Header = () => {
   const navigate = useNavigate();
 
   const handleLogOut = () => {
     localStorage.clear();
-    navigate(Paths.LOGIN);
+    navigate(Page.LOGIN);
   };
 
   return (

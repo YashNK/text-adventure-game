@@ -1,60 +1,51 @@
 export const GameData = [
   {
-    storyId: 1,
-    storyTitle: "Haunted Office",
-    storyDescription: `Hello Max, loyal servant of FinTech, does working late, alone, at the top most floor of your building not scare you? Aren't you afraid of whats lurking outside. Well tonight is not gonna be like most nights, this night might as well be your last night... Who am I you ask, well consider me as your only ray of hope to get pass, well... corporate HELL. Ill be guiding you through each floor of your building, don't consider me as a merciful companion, I wont be taking any sides, its your journey, your hell, I'm just here to make sure you don't get lost in the chaos. My name is Echo.`,
+    storyId: 2,
+    storyTitle: "Echoes of the Forgotten Realm",
+    storyDescription: `Welcome, adventurer. The ancient kingdom of Eldara is in peril. Dark forces seek to reunite the shards of the Ethereal Core, a magical artifact of untold power. As the last descendant of the Ethereal Keepers, the burden to restore balance falls upon you. Brace yourself for a journey through perilous lands, forgotten ruins, and shadowy enemies. Will you emerge as the hero Eldara needs, or succumb to the darkness?`,
     chapters: [
       {
         chapterId: 1,
-        chapterTitle: "Production Failed.",
-        chapterDescription: "Lifeless Life.",
+        chapterTitle: "The Call to Adventure",
+        chapterDescription:
+          "Begin your journey in the humble village of Greenwood.",
         isCompleted: false,
         isActive: true,
         levels: [
           {
             levelId: 1,
-            levelTitle: "21st Floor",
-            levelMessage: "Alone And Alive.",
+            levelTitle: "The Village of Greenwood",
+            levelMessage: "The quiet before the storm.",
             scene: [
               {
                 sceneId: 1,
                 sceneMessage:
-                  "Working late as usual I see, say max, how does it feel to be all alone in a office? Is working this much really necessary? Look out your window for a change.",
+                  "The village elder summons you to the town square. A strange glow emanates from the forest to the north.",
                 sceneOptions: [
                   {
-                    look: "Looking outside the window, You see the pretty lights of tokyo city. Life is really beautiful Max, you should spend it outside at times.",
-                    west: 2,
-                    north: 4,
-                    attack: [
-                      {
-                        monsterId: 1,
-                        monsterName: "Zombie Janitor",
-                        monsterHealth: 100,
-                        monsterDamage: 15,
-                        attackMessage:
-                          "A decayed figure steps out with a mop, its eyes vacant and hungry.",
-                      },
-                    ],
+                    look: "The elder's eyes are filled with worry. The map you hold feels heavier with each passing moment.",
+                    north: 2,
+                    east: 3,
+                    attack: [],
                   },
                 ],
               },
               {
                 sceneId: 2,
                 sceneMessage:
-                  "A red emergency light casts an eerie glow. You see your former coworker, now a zombie, staggering towards you.",
+                  "The forest path is eerie, with glowing mushrooms lighting the way. You hear whispers that chill your spine.",
                 sceneOptions: [
                   {
-                    look: "The stairwell door is ajar, but the elevator shaft is dark. Something stirs inside.",
-                    west: 3,
-                    east: 1,
+                    look: "A shadow moves in the trees. Are you being watched?",
+                    west: 1,
                     attack: [
                       {
-                        monsterId: 2,
-                        monsterName: "Zombie Developer",
-                        monsterHealth: 80,
-                        monsterDamage: 20,
+                        monsterId: 1,
+                        monsterName: "Forest Wraith",
+                        monsterHealth: 70,
+                        monsterDamage: 10,
                         attackMessage:
-                          "The Zombie Developer slams against the glass, growling in frustration.",
+                          "The Forest Wraith emerges, its translucent form darting between the trees.",
                       },
                     ],
                   },
@@ -63,20 +54,20 @@ export const GameData = [
               {
                 sceneId: 3,
                 sceneMessage:
-                  "The library is a mess, books scattered on the floor. A faint glow catches your eye – a red notebook under old magazines.",
+                  "A derelict shrine stands in a clearing, its runes glowing faintly. Something powerful resides here.",
                 sceneOptions: [
                   {
-                    look: "As you approach, a body emerges from behind a shelf, its mouth open in silent horror.",
+                    look: "The runes tell a story of a battle long forgotten.",
                     east: 2,
                     west: 4,
                     attack: [
                       {
-                        monsterId: 3,
-                        monsterName: "Zombie Office Worker",
-                        monsterHealth: 120,
-                        monsterDamage: 25,
+                        monsterId: 2,
+                        monsterName: "Shrine Guardian",
+                        monsterHealth: 100,
+                        monsterDamage: 15,
                         attackMessage:
-                          "The Zombie Office Worker lunges with unnatural speed, its nails scraping at you.",
+                          "The Shrine Guardian awakens, its stone fists raised.",
                       },
                     ],
                   },
@@ -85,31 +76,22 @@ export const GameData = [
               {
                 sceneId: 4,
                 sceneMessage:
-                  "The conference room is eerily silent. An overturned table and the distant sound of tapping at the door. Zombies shuffle outside.",
+                  "The edge of the forest opens into a vast meadow. A storm brews on the horizon.",
                 sceneOptions: [
                   {
-                    look: "A flickering monitor shows distorted images of the office. The door trembles as something tries to break in.",
+                    look: "The storm feels unnatural, as though summoned by something sinister.",
                     west: 5,
-                    attack: [
-                      {
-                        monsterId: 4,
-                        monsterName: "Zombie CEO",
-                        monsterHealth: 150,
-                        monsterDamage: 30,
-                        attackMessage:
-                          "The Zombie CEO stands in the doorway, blocking your escape with a growl.",
-                      },
-                    ],
+                    attack: [],
                   },
                 ],
               },
               {
                 sceneId: 5,
                 sceneMessage:
-                  "You’ve completed chapter 1. Type 'start' to continue to chapter 2.",
+                  "You’ve completed Chapter 1. Type 'start' to enter Chapter 2.",
                 sceneOptions: [
                   {
-                    look: "type 'start' to enter chapter 2",
+                    look: "Type 'start' to proceed to the next chapter.",
                     startNewChapter: 2,
                   },
                 ],
@@ -120,33 +102,33 @@ export const GameData = [
       },
       {
         chapterId: 2,
-        chapterTitle: "The Escape Plan",
-        chapterDescription: "The outbreak is real. How do you survive?",
+        chapterTitle: "Whispering Woods",
+        chapterDescription: "Face the dangers lurking in the forest depths.",
         isCompleted: false,
         isActive: false,
         levels: [
           {
             levelId: 1,
-            levelTitle: "Survival Mode",
-            levelMessage: "No longer a developer, you are now a survivor.",
+            levelTitle: "The Whispering Woods",
+            levelMessage: "Every shadow hides a threat.",
             scene: [
               {
                 sceneId: 1,
                 sceneMessage:
-                  "You rush to the stairwell, but the door is locked. Zombies block the hall. There’s no turning back.",
+                  "The deeper you go, the thicker the mist becomes. Voices whisper your name.",
                 sceneOptions: [
                   {
-                    look: "The air reeks of decay, and behind you, the stairwell door rattles. Zombies are closing in.",
-                    west: 2,
-                    north: 4,
+                    look: "The mist swirls unnaturally. You can barely see the path ahead.",
+                    north: 2,
+                    west: 3,
                     attack: [
                       {
-                        monsterId: 5,
-                        monsterName: "Zombie Accountant",
-                        monsterHealth: 100,
-                        monsterDamage: 18,
+                        monsterId: 3,
+                        monsterName: "Mist Wraith",
+                        monsterHealth: 90,
+                        monsterDamage: 12,
                         attackMessage:
-                          "The Zombie Accountant swings a calculator at you like a club.",
+                          "The Mist Wraith materializes, its tendrils reaching for you.",
                       },
                     ],
                   },
@@ -155,20 +137,19 @@ export const GameData = [
               {
                 sceneId: 2,
                 sceneMessage:
-                  "You sprint for the fire exit, but it’s blocked. The horde is closing in. There’s no time left.",
+                  "A broken bridge lies ahead. You hear growls from the ravine below.",
                 sceneOptions: [
                   {
-                    look: "The emergency exit sign glows, but the door is blocked. A fire extinguisher nearby could be useful.",
-                    west: 3,
-                    east: 1,
+                    look: "The bridge creaks as you approach. Something is moving in the darkness below.",
+                    west: 1,
                     attack: [
                       {
-                        monsterId: 6,
-                        monsterName: "Zombie Intern",
-                        monsterHealth: 60,
-                        monsterDamage: 15,
+                        monsterId: 4,
+                        monsterName: "Ravine Beast",
+                        monsterHealth: 120,
+                        monsterDamage: 18,
                         attackMessage:
-                          "The Zombie Intern claws at you, blood staining its hands.",
+                          "The Ravine Beast leaps from the shadows, its claws glinting in the moonlight.",
                       },
                     ],
                   },
@@ -177,30 +158,40 @@ export const GameData = [
               {
                 sceneId: 3,
                 sceneMessage:
-                  "The lobby is filled with zombies. The roof exit is nearby, but desks block the way.",
+                  "A grove of ancient trees stands before you, their roots pulsating with energy.",
                 sceneOptions: [
                   {
-                    look: "Zombies shuffle across the reception area. The roof exit is just a few feet away.",
+                    look: "The grove seems alive, as though watching your every move.",
                     east: 2,
-                    west: 4,
+                    north: 4,
+                    attack: [
+                      {
+                        monsterId: 5,
+                        monsterName: "Ancient Treant",
+                        monsterHealth: 150,
+                        monsterDamage: 25,
+                        attackMessage:
+                          "The Ancient Treant awakens, its massive limbs crashing towards you.",
+                      },
+                    ],
                   },
                 ],
               },
               {
                 sceneId: 4,
                 sceneMessage:
-                  "You’ve made it to the rooftop. The helicopter is close, but the zombies are nearly upon you.",
+                  "You’ve reached the forest's heart. The fragment of the Ethereal Core is within reach.",
                 sceneOptions: [
                   {
-                    look: "A few zombies shuffle across the rooftop, unaware of your presence. The helicopter is almost here, but you need the key to escape.",
+                    look: "The fragment glows with a light that drives the shadows back.",
                     attack: [
                       {
-                        monsterId: 8,
-                        monsterName: "Zombie Pilot",
-                        monsterHealth: 250,
-                        monsterDamage: 50,
+                        monsterId: 6,
+                        monsterName: "Shadow Guardian",
+                        monsterHealth: 200,
+                        monsterDamage: 30,
                         attackMessage:
-                          "The Zombie Pilot slams a chair at you with terrifying force.",
+                          "The Shadow Guardian emerges, its blade shimmering with dark energy.",
                       },
                     ],
                   },

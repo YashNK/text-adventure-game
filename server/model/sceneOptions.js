@@ -5,6 +5,10 @@ const autoIncrement = mongooseSequence(mongoose);
 
 const sceneOptionSchema = new mongoose.Schema(
   {
+    sceneOptionId: {
+      type: Number,
+      unique: true,
+    },
     look: {
       type: String,
       required: true,
@@ -26,10 +30,6 @@ const sceneOptionSchema = new mongoose.Schema(
     ],
     startNewChapter: {
       type: Number,
-    },
-    sceneOptionId: {
-      type: Number,
-      unique: true,
     },
   },
   {

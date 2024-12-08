@@ -1,0 +1,56 @@
+.skeleton_container {
+  position: relative;
+  .skeleton_title,
+  .skeleton_description,
+  .skeleton_btn {
+    background-color: #6f9fa0 !important;
+    border: none !important;
+    height: 20px;
+    position: relative;
+    overflow: hidden;
+    animation: pulse 3s infinite linear;
+    background-size: 200% 100%;
+    background-image: linear-gradient(
+      to right,
+      rgb(20, 78, 92) 25%,
+      rgb(22, 96, 113) 50%,
+      rgb(20, 78, 92) 75%
+    );
+  }
+  .skeleton_title {
+    border-radius: 5px;
+    width: 25%;
+    min-width: 20px;
+    margin-bottom: 6px;
+  }
+  .skeleton_description {
+    border-radius: 10px;
+    width: 70%;
+    height: 40px;
+    min-width: 20px;
+  }
+  .skeleton_btn {
+    width: 120px;
+    height: 36px;
+    border-radius: 10px !important;
+  }
+}
+@keyframes pulse {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
+@media (max-width: 768px) {
+  .skeleton-btn {
+    width: 70px;
+  }
+  .skeleton-title {
+    width: 40%;
+  }
+  .skeleton-description {
+    width: 80%;
+  }
+}

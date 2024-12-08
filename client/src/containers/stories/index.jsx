@@ -3,12 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { useFetchApi } from "../../hooks/use-fetch-api";
 import { apiRoutes } from "../../constants/api-routes";
 import { SkeletonLoader } from "./skeletonLoader";
-import "./stories.css";
-import { toast } from "react-toastify";
+import { Page } from "../../constants/routes";
+import "./stories.scss";
+import { createNewPath } from "../../utils";
 
 export const Stories = () => {
   const navigate = useNavigate();
-  const { fetchData, loading } = useFetchApi();
+  const { fetchData, isLoading, isSuccess, data } = useFetchApi();
   const [story, setStory] = useState([
     {
       storyId: 0,
@@ -22,67 +23,67 @@ export const Stories = () => {
   });
 
   useEffect(() => {
-    try {
-      getData();
-    } catch (err) {
-      toast.error(err.message);
-    }
+    fetchData(apiRoutes.STORY, "GET");
   }, []);
 
-  const getData = async () => {
-    try {
-      const response = await fetchData(`${apiRoutes.STORY}/stories`, "GET");
-      if (response.isSuccess) {
-        setStory(response.data);
-      }
-    } catch (err) {
-      toast.error(err.message);
+  useEffect(() => {
+    if (data && isSuccess) {
+      setStory(data);
     }
-  };
+  }, [data, isSuccess]);
 
   return (
     <div className="story_container">
-      {loading ? (
+      {isLoading ? (
         <SkeletonLoader />
-      ) : (
+      ) : story.length > 0 ? (
         story.map((s) => (
-          <>
-            <div className="main_card_container story_card_container">
-              <div>
-                <div className="story_card_title">{s.storyTitle}</div>
-                <div
-                  className={`${
-                    viewStoryDescription.show &&
-                    viewStoryDescription.storyId === s.storyId
-                      ? "show_full_description"
-                      : "hide_story_description"
-                  } story_card_description`}
-                >
-                  {s.storyDescription}
-                </div>
-              </div>
-              <div className="flex px-4">
-                <button
-                  onClick={() => navigate("/chapters")}
-                  className="primary_btn mr-3"
-                >
-                  Begin Your Journey
-                </button>
-                <button
-                  onClick={() =>
-                    setViewStoryDescription(() => ({
-                      storyId: s.storyId,
-                      show: !viewStoryDescription.show,
-                    }))
-                  }
-                  className="secondary_btn"
-                >
-                  View Story Description
-                </button>
+          <div
+            key={s.storyId}
+            className="main_card_container story_card_container mb-3"
+          >
+            <div className="story_card_content">
+              <div className="story_card_title">{s.storyTitle}</div>
+              <div
+                className={`${
+                  viewStoryDescription.show &&
+                  viewStoryDescription.storyId === s.storyId
+                    ? "show_full_description"
+                    : "truncate"
+                } story_card_description`}
+              >
+                {s.storyDescription}
               </div>
             </div>
-          </>
+            <div className="story_btn_container">
+              <button
+                onClick={() =>
+                  navigate(
+                    createNewPath(Page.CHARACTERS, {
+                      storyId: s.storyId,
+                    })
+                  )
+                }
+                className="primary_btn mr-3"
+              >
+                Begin Your Journey
+              </button>
+              <button
+                onClick={() =>
+                  setViewStoryDescription(() => ({
+                    storyId: s.storyId,
+                    show: !viewStoryDescription.show,
+                  }))
+                }
+                className="secondary_btn"
+              >
+                View Story Description
+              </button>
+            </div>
+          </div>
         ))
+      ) : (
+        <div className="flex items-center justify-center h-full">No data</div>
       )}
     </div>
   );

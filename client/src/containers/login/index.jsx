@@ -1,32 +1,31 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Paths } from "../../constants/paths";
+import { Page } from "../../constants/routes";
 import { useFetchApi } from "../../hooks/use-fetch-api";
-import { toast } from "react-toastify";
 import { apiRoutes } from "../../constants/api-routes";
 import { Loader } from "../../components/loader";
-import "./login.css";
+import I18 from "../../plugins/i18";
+import "./login.scss";
 
 export const Login = () => {
   const navigate = useNavigate();
-  const { fetchData, loading } = useFetchApi();
+  const { fetchData, isLoading, isSuccess, data } = useFetchApi();
   const [loginForm, setLoginForm] = useState({ username: "", password: "" });
   const [invalid, setInvalid] = useState({ username: false, password: false });
 
-  const handleSubmit = async () => {
+  useEffect(() => {
+    if (data && data.token && isSuccess) {
+      localStorage.setItem("TOKEN", data.token);
+      navigate(Page.DASHBOARD);
+    }
+  }, [data]);
+
+  const handleSubmit = () => {
     if (validateForm()) {
-      try {
-        const response = await fetchData(apiRoutes.LOGIN, "POST", {
-          username: loginForm.username.toLowerCase(),
-          password: loginForm.password,
-        });
-        if (response.token) {
-          localStorage.setItem("TOKEN", response.token);
-          navigate(Paths.BASE);
-        }
-      } catch (err) {
-        toast.error(err.message);
-      }
+      fetchData(apiRoutes.LOGIN, "POST", {
+        username: loginForm.username.toLowerCase(),
+        password: loginForm.password,
+      });
     }
   };
 
@@ -44,12 +43,19 @@ export const Login = () => {
   };
 
   return (
-    <div className="h-full flex items-center justify-around">
+    <div className="auth_form_container h-full flex items-center justify-around">
       <div className="h-full flex_1_1_10 flex items-center justify-center">
-        <div className="w-[70%]">
-          <div className="text-center text-xl">Welcome to D&D</div>
+        <div
+          onKeyDown={(e) => {
+            if (e.key === "Enter") handleSubmit();
+          }}
+          className="w-[70%]"
+        >
+          <div className="text-center text-xl">
+            <I18 tkey="WELCOME_TO_ECHO_VERSE" />
+          </div>
           <div className="text-center pb-10 text-sm">
-            Embark on an Epic Adventure
+            <I18 tkey="EMBARK_ON_AN_EPIC_ADVENTURE" />
           </div>
           <div className="auth_input mb-8">
             <input
@@ -63,10 +69,12 @@ export const Login = () => {
               required
               value={loginForm.username}
             />
-            <label htmlFor="username">Username</label>
+            <label htmlFor="username">
+              <I18 tkey="USERNAME" />
+            </label>
             {invalid.username ? (
               <span className="invalid invalid_top_20 primary_color">
-                Username is required
+                <I18 tkey="USERNAME_IS_REQUIRED" />
               </span>
             ) : (
               ""
@@ -84,10 +92,12 @@ export const Login = () => {
                 setInvalid((prev) => ({ ...prev, password: false }));
               }}
             />
-            <label htmlFor="password">Password</label>
+            <label htmlFor="password">
+              <I18 tkey="PASSWORD" />
+            </label>
             {invalid.password ? (
               <span className="invalid invalid_top_20 primary_color">
-                Password is required
+                <I18 tkey="PASSWORD_IS_REQUIRED" />
               </span>
             ) : (
               ""
@@ -96,32 +106,34 @@ export const Login = () => {
           <div className="pb-5">
             <button
               className="auth_btn min_width_200"
-              disabled={loading}
+              disabled={isLoading}
               onClick={() => handleSubmit()}
               type="submit"
             >
-              {loading ? (
+              {isLoading ? (
                 <>
                   <Loader />
                 </>
               ) : (
-                <span>Login</span>
+                <span>
+                  <I18 tkey="LOGIN" />
+                </span>
               )}
             </button>
           </div>
           <div className="text-center">
-            Do not have an account?{" "}
+            <I18 tkey="DO_NOT_HAVE_AN_ACCOUNT" />?{" "}
             <span
               className="auth_footer"
-              onClick={() => navigate(Paths.REGISTER)}
+              onClick={() => navigate(Page.REGISTER)}
             >
-              Register
+              <I18 tkey="REGISTER" />
             </span>
           </div>
         </div>
       </div>
       <div className="auth_image_container">
-        <div className="auth_image_login" />
+        <div className="auth_image auth_image_login" />
       </div>
     </div>
   );

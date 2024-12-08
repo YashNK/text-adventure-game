@@ -1,0 +1,17 @@
+{
+  "LOGIN": "Login",
+  "REGISTER": "Register",
+  "WELCOME_TO": "Welcome to",
+  "ECHO_VERSE": "EchoVerse",
+  "WELCOME_TO_ECHO_VERSE": "Welcome to EchoVerse",
+  "GET_STARTED": "Get Started",
+  "EMBARK_ON_AN_EPIC_ADVENTURE": "Embark on an Epic Adventure",
+  "USERNAME": "Username",
+  "USERNAME_IS_REQUIRED": "Username is required",
+  "PASSWORD": "Password",
+  "PASSWORD_IS_REQUIRED": "Password is required",
+  "DO_NOT_HAVE_AN_ACCOUNT": "Do not have an account",
+  "START_YOUR_ADVENTURE": "Start your adventure",
+  "CONFIRM_PASSWORD": "Confirm Password",
+  "ALREADY_HAVE_AN_ACCOUNT": "Already have an account"
+}

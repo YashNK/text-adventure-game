@@ -5,6 +5,10 @@ const autoIncrement = mongooseSequence(mongoose);
 
 const storySchema = new mongoose.Schema(
   {
+    storyId: {
+      type: Number,
+      unique: true,
+    },
     storyTitle: {
       type: String,
       required: true,
@@ -13,16 +17,18 @@ const storySchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    characters: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Character",
+      },
+    ],
     chapters: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Chapter",
       },
     ],
-    storyId: {
-      type: Number,
-      unique: true,
-    },
   },
   {
     versionKey: false,

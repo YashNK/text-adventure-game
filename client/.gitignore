@@ -5,6 +5,7 @@
 /src/containers/game
 /.pnp
 .pnp.js
+.env
 
 # testing
 /coverage

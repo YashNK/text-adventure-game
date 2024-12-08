@@ -1,13 +1,15 @@
 import { RouterProvider } from "react-router-dom";
-import { router } from "./router/router";
+import { router } from "./router/index";
 import { Slide, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import "./App.css";
-import "./assets/color.css";
+import "./App.scss";
+import "./assets/color.scss";
+import "./assets/constants.scss";
+import "./assets/fonts.scss";
 
 function App() {
   return (
-    <div className="h-screen bg-black text-white">
+    <div className="h-screen">
       <ToastContainer
         transition={Slide}
         position="top-center"

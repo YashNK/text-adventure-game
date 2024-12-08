@@ -1,4 +1,6 @@
 import Chapter from "../model/chapter.js";
+import Character from "../model/character.js";
+import character from "../model/character.js";
 import Level from "../model/level.js";
 import Monster from "../model/monster.js";
 import Scene from "../model/scene.js";
@@ -7,6 +9,44 @@ import Story from "../model/story.js";
 
 export const insertGameData = async (req, res) => {
   try {
+    const charactersData = [
+      {
+        name: "Max the Developer",
+        health: 100,
+        attackPower: 15,
+        specialAbility: "Debugging Shockwave",
+        description: "A seasoned developer who fights with logic and a laptop.",
+        avatar: "https://example.com/avatar1.png",
+      },
+      {
+        name: "Zara the Designer",
+        health: 80,
+        attackPower: 10,
+        specialAbility: "Creative Flare",
+        description:
+          "A designer with an eye for detail and sharp design tools.",
+        avatar: "https://example.com/avatar2.png",
+      },
+      {
+        name: "Ethan the Manager",
+        health: 120,
+        attackPower: 20,
+        specialAbility: "Strategic Overhaul",
+        description:
+          "A manager who excels at planning and motivating the team.",
+        avatar: "https://example.com/avatar3.png",
+      },
+    ];
+    const testCharacter = await Character.create({
+      name: "Test Character",
+      health: 100,
+      attackPower: 10,
+      description: "Test description",
+    });
+    console.log(testCharacter.characterId);
+
+    const insertedCharacters = await character.insertMany(charactersData);
+
     const monstersData = [
       {
         monsterName: "Zombie Janitor",
@@ -159,6 +199,7 @@ export const insertGameData = async (req, res) => {
       storyDescription:
         "Hello Max, loyal servant of FinTech, does working late, alone, at the top most floor of your building not scare you? Aren't you afraid of whats lurking outside. Well tonight is not gonna be like most nights, this night might as well be your last night... Who am I you ask, well consider me as your only ray of hope to get pass, well... corporate HELL.",
       chapters: [insertedChapters[0]._id],
+      characters: insertedCharacters.map((char) => char._id),
     };
 
     const insertedStory = await Story.create(storyData);

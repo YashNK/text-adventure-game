@@ -5,6 +5,10 @@ const autoIncrement = mongooseSequence(mongoose);
 
 const chapterSchema = new mongoose.Schema(
   {
+    chapterId: {
+      type: Number,
+      unique: true,
+    },
     chapterTitle: {
       type: String,
       required: true,
@@ -27,10 +31,6 @@ const chapterSchema = new mongoose.Schema(
         ref: "Level",
       },
     ],
-    chapterId: {
-      type: Number,
-      unique: true,
-    },
   },
   {
     versionKey: false,

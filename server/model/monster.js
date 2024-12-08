@@ -5,6 +5,10 @@ const autoIncrement = mongooseSequence(mongoose);
 
 const monsterSchema = new mongoose.Schema(
   {
+    monsterId: {
+      type: Number,
+      unique: true,
+    },
     monsterName: {
       type: String,
       required: true,
@@ -20,10 +24,6 @@ const monsterSchema = new mongoose.Schema(
     attackMessage: {
       type: String,
       required: true,
-    },
-    monsterId: {
-      type: Number,
-      unique: true,
     },
   },
   {

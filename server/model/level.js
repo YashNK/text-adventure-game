@@ -5,6 +5,10 @@ const autoIncrement = mongooseSequence(mongoose);
 
 const levelSchema = new mongoose.Schema(
   {
+    levelId: {
+      type: Number,
+      unique: true,
+    },
     levelTitle: {
       type: String,
       required: true,
@@ -19,10 +23,6 @@ const levelSchema = new mongoose.Schema(
         ref: "Scene",
       },
     ],
-    levelId: {
-      type: Number,
-      unique: true,
-    },
   },
   {
     versionKey: false,

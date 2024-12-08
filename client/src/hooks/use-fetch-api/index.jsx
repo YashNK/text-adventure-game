@@ -1,34 +1,57 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { Page } from "../../constants/routes";
 
 export const useFetchApi = () => {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+  const [data, setData] = useState(null);
+  const [isSuccess, setIsSuccess] = useState(null);
 
   const fetchData = async (apiRoute, apiMethod, reqBody = null) => {
-    setLoading(true);
-    setError(null);
+    setIsLoading(true);
+    setData(null);
+    setIsSuccess(null);
     try {
+      const headers = {
+        "Content-Type": "application/json",
+      };
+      const token = localStorage.getItem("TOKEN");
+      if (token) {
+        headers.Authorization = `Bearer ${token}`;
+      }
       const res = await fetch(apiRoute, {
         method: apiMethod,
-        headers: { "Content-Type": "application/json" },
+        headers,
         body: reqBody ? JSON.stringify(reqBody) : null,
       });
-      const data = await res.json();
+      const response = await res.json();
       if (res.ok) {
-        toast.success(data.message);
+        if (response.messageCode === 1) {
+          toast.success(response.message);
+        }
+        setData(response.data);
+        setIsSuccess(response.isSuccess);
+        return response.data;
+      } else if (res.status === 403) {
+        toast.error("Session expired. Please log in again.");
+        localStorage.removeItem("TOKEN");
+        navigate(Page.LOGIN);
+      } else if (res.status === 401) {
+        toast.error("Invalid User!");
+        localStorage.removeItem("TOKEN");
+        navigate(Page.FORBIDDEN);
+      } else {
+        toast.error(response.message || "Something went wrong");
+        setIsSuccess(response.isSuccess);
       }
-      if (!res.ok) {
-        toast.error(data.message || "Something went wrong");
-      }
-      return data;
     } catch (err) {
-      setError(err.message);
-      throw err;
+      toast.error("Network or Server Error");
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
-  return { fetchData, loading, error };
+  return { fetchData, isLoading, isSuccess, data };
 };

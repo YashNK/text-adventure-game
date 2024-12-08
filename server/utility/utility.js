@@ -1,9 +1,15 @@
-const sendResponse = (res, statusCode, message, data = null, error = null) => {
+const sendResponse = (
+  res,
+  statusCode,
+  message,
+  data = null,
+  messageCode = 1
+) => {
   return res.status(statusCode).json({
     message,
     data,
-    error,
     isSuccess: statusCode >= 200 && statusCode < 300,
+    messageCode,
   });
 };
 

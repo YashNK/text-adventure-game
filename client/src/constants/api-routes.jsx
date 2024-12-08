@@ -1,8 +1,10 @@
-const BASE_URL = "http://localhost:5000/api";
+const BASE = process.env.REACT_APP_BASE_URL;
 
 export const apiRoutes = {
-  BASE_URL,
-  LOGIN: `${BASE_URL}/users/login`,
-  REGISTER: `${BASE_URL}/users/register`,
-  STORY: `${BASE_URL}/story`,
+  BASE,
+  LOGIN: `${BASE}/user/login`,
+  REGISTER: `${BASE}/user/register`,
+  CURRENT_USER: `${BASE}/user/current-user`,
+  STORY: `${BASE}/story/stories`,
+  CHARACTERS: `${BASE}/character`,
 };
