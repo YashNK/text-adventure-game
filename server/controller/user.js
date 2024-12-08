@@ -54,7 +54,7 @@ export const getCurrentUser = async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select("-password -_id");
     if (!user) {
-      return sendResponse(res, 400, "User Not Found");
+      return sendResponse(res, 401, "User Not Found");
     }
     return sendResponse(
       res,

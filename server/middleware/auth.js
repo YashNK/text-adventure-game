@@ -11,7 +11,7 @@ const authenticateToken = (req, res, next) => {
     if (err) {
       const isTokenExpired = err.name === "TokenExpiredError";
       if (isTokenExpired) {
-        return sendResponse(res, 403, "Token Expired");
+        return sendResponse(res, 401, "Token Expired");
       } else {
         return sendResponse(res, 401, "Invalid Token");
       }

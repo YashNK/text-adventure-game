@@ -4,6 +4,10 @@ import { Page } from "../../constants/routes";
 import { useFetchApi } from "../../hooks/use-fetch-api";
 import { apiRoutes } from "../../constants/api-routes";
 import { Loader } from "../../components/loader";
+import { LocalStorageKeys } from "../../constants";
+import LoginImage from "../../assets/images/login.webp";
+import LazyImage from "../../utils/lazy-image";
+import PlaceholderImage from "../../assets/images/login-small.webp";
 import I18 from "../../plugins/i18";
 import "./login.scss";
 
@@ -15,7 +19,7 @@ export const Login = () => {
 
   useEffect(() => {
     if (data && data.token && isSuccess) {
-      localStorage.setItem("TOKEN", data.token);
+      localStorage.setItem(LocalStorageKeys.TOKEN, data.token);
       navigate(Page.DASHBOARD);
     }
   }, [data]);
@@ -133,7 +137,12 @@ export const Login = () => {
         </div>
       </div>
       <div className="auth_image_container">
-        <div className="auth_image auth_image_login" />
+        <LazyImage
+          src={LoginImage}
+          placeholder={PlaceholderImage}
+          alt="Login"
+          className="auth_image"
+        />
       </div>
     </div>
   );

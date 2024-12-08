@@ -1,3 +1,4 @@
+import { LocalStorageKeys } from "../../constants";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -17,7 +18,7 @@ export const useFetchApi = () => {
       const headers = {
         "Content-Type": "application/json",
       };
-      const token = localStorage.getItem("TOKEN");
+      const token = localStorage.getItem(LocalStorageKeys.TOKEN);
       if (token) {
         headers.Authorization = `Bearer ${token}`;
       }
@@ -34,13 +35,12 @@ export const useFetchApi = () => {
         setData(response.data);
         setIsSuccess(response.isSuccess);
         return response.data;
-      } else if (res.status === 403) {
-        toast.error("Session expired. Please log in again.");
-        localStorage.removeItem("TOKEN");
-        navigate(Page.LOGIN);
       } else if (res.status === 401) {
-        toast.error("Invalid User!");
-        localStorage.removeItem("TOKEN");
+        toast.error("Your Session has expired.");
+        localStorage.clear();
+        navigate(Page.LOGIN);
+      } else if (res.status === 403) {
+        toast.error("Access Denied");
         navigate(Page.FORBIDDEN);
       } else {
         toast.error(response.message || "Something went wrong");

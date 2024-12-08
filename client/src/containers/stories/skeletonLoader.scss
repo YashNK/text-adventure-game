@@ -16,18 +16,17 @@
       rgb(22, 96, 113) 50%,
       rgb(20, 78, 92) 75%
     );
+    border-radius: 4px;
   }
   .skeleton_title {
-    border-radius: 5px;
     width: 25%;
     min-width: 20px;
     margin-bottom: 6px;
   }
   .skeleton_description {
-    border-radius: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     width: 70%;
-    height: 40px;
+    height: 35px;
     min-width: 20px;
   }
   .skeleton_btn_container {
@@ -35,7 +34,6 @@
     .skeleton_btn {
       width: 120px;
       height: 36px;
-      border-radius: 10px !important;
     }
   }
 }

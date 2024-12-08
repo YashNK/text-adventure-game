@@ -4,8 +4,8 @@ import { useFetchApi } from "../../hooks/use-fetch-api";
 import { apiRoutes } from "../../constants/api-routes";
 import { SkeletonLoader } from "./skeletonLoader";
 import { Page } from "../../constants/routes";
-import "./stories.scss";
 import { createNewPath } from "../../utils";
+import "./stories.scss";
 
 export const Stories = () => {
   const navigate = useNavigate();

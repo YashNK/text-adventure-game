@@ -43,7 +43,6 @@ export const insertGameData = async (req, res) => {
       attackPower: 10,
       description: "Test description",
     });
-    console.log(testCharacter.characterId);
 
     const insertedCharacters = await character.insertMany(charactersData);
 

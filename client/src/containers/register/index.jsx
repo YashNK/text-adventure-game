@@ -5,6 +5,9 @@ import { useFetchApi } from "../../hooks/use-fetch-api";
 import { apiRoutes } from "../../constants/api-routes";
 import { Loader } from "../../components/loader";
 import I18 from "../../plugins/i18";
+import LazyImage from "../../utils/lazy-image";
+import RegisterImage from "../../assets/images/register.webp";
+import PlaceholderImage from "../../assets/images/register-small.webp";
 
 export const Register = () => {
   const navigate = useNavigate();
@@ -63,8 +66,7 @@ export const Register = () => {
       setInvalid((prev) => ({
         ...prev,
         password: true,
-        passwordMessage:
-          "Password should contain at least one special character",
+        passwordMessage: "Password should contain a special character",
       }));
       return false;
     }
@@ -72,7 +74,7 @@ export const Register = () => {
       setInvalid((prev) => ({
         ...prev,
         password: true,
-        passwordMessage: "Password should contain at least one number",
+        passwordMessage: "Password should contain a number",
       }));
       valid = false;
     }
@@ -80,8 +82,7 @@ export const Register = () => {
       setInvalid((prev) => ({
         ...prev,
         password: true,
-        passwordMessage:
-          "Password should contain at least one uppercase character",
+        passwordMessage: "Password should contain a uppercase character",
       }));
       valid = false;
     }
@@ -89,8 +90,7 @@ export const Register = () => {
       setInvalid((prev) => ({
         ...prev,
         password: true,
-        passwordMessage:
-          "Password should contain at least one lowercase character",
+        passwordMessage: "Password should contain a lowercase character",
       }));
       valid = false;
     }
@@ -116,7 +116,12 @@ export const Register = () => {
   return (
     <div className="auth_form_container h-full overflow-auto flex items-center justify-around">
       <div className="auth_image_container">
-        <div className="auth_image auth_image_register" />
+        <LazyImage
+          src={RegisterImage}
+          placeholder={PlaceholderImage}
+          alt="Register"
+          className="auth_image"
+        />
       </div>
       <div className="flex_1_1_10 h-full overflow-auto py-5 flex my-auto items-center justify-center">
         <div

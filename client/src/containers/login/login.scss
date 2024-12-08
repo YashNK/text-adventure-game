@@ -21,6 +21,7 @@
         left: 10px;
         font-size: 12px;
         background-color: var(--appBackground);
+        border-radius: 5px;
         padding: 0px 8px;
         color: var(--primaryColor);
       }
@@ -50,6 +51,9 @@
       transform: translateY(-50%);
       color: var(--gray);
       transition: 0.2s ease all;
+    }
+    > span {
+      text-align: right;
     }
   }
   .auth_btn {
@@ -105,16 +109,12 @@
     flex: 1 1 10px;
     padding: 30px;
     .auth_image {
-      background-size: cover;
       background-position: 40%;
+      background-size: cover;
       height: 100%;
       border-radius: 50px;
-      &.auth_image_login {
-        background-image: url("../../assets/images/login.webp");
-      }
-      &.auth_image_register {
-        background-image: url("../../assets/images/register.webp");
-      }
+      object-fit: cover;
+      object-position: 40%;
     }
   }
 }
@@ -132,7 +132,28 @@
     background-position: 150% 200%;
   }
 }
-@media (max-width: 650px) {
+@media (max-width: 750px) {
+  .auth_form_container {
+    .auth_input {
+      > input {
+        &:focus,
+        &:active,
+        &:valid {
+          border-color: var(--primaryColor) !important;
+        }
+        &:focus ~ label,
+        &:valid ~ label {
+          top: 0px;
+          left: 10px;
+          font-size: 12px;
+          background-color: var(--primaryColor);
+          border-radius: 3px;
+          padding: 0px 8px;
+          color: var(--white);
+        }
+      }
+    }
+  }
   .auth_image_container {
     z-index: -1;
     position: absolute;
