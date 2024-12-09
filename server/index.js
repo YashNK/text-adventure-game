@@ -11,7 +11,18 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.use(cors());
+const allowedOrigin = process.env.ALLOWED_ORIGIN;
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (!origin || origin === allowedOrigin) {
+      callback(null, true);
+    } else {
+      callback(null, false);
+    }
+  },
+};
+app.use(cors(corsOptions));
+
 app.use(express.json());
 
 app.use("/api/game", gameDataRoutes);

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import { useFetchApi } from "../../hooks/use-fetch-api";
 import { apiRoutes } from "../../constants/api-routes";
 import { SkeletonLoader } from "./skeletonLoader";
@@ -9,6 +9,7 @@ import "./stories.scss";
 
 export const Stories = () => {
   const navigate = useNavigate();
+  const { currentUser } = useOutletContext();
   const { fetchData, isLoading, isSuccess, data } = useFetchApi();
   const [story, setStory] = useState([
     {
@@ -31,6 +32,27 @@ export const Stories = () => {
       setStory(data);
     }
   }, [data, isSuccess]);
+
+  const handleBeginJourney = (storyId) => {
+    // if (currentUser.CharacterId) {
+    //   navigate(
+    //     createNewPath(Page.CHAPTERS, {
+    //       storyId: storyId,
+    //     })
+    //   );
+    // } else {
+    //   navigate(
+    //     createNewPath(Page.CHARACTERS, {
+    //       storyId: storyId,
+    //     })
+    //   );
+    // }
+    navigate(
+      createNewPath(Page.CHARACTERS, {
+        storyId: storyId,
+      })
+    );
+  };
 
   return (
     <div className="story_container">
@@ -57,13 +79,7 @@ export const Stories = () => {
             </div>
             <div className="story_btn_container">
               <button
-                onClick={() =>
-                  navigate(
-                    createNewPath(Page.CHARACTERS, {
-                      storyId: s.storyId,
-                    })
-                  )
-                }
+                onClick={() => handleBeginJourney(s.storyId)}
                 className="primary_btn mr-3"
               >
                 Begin Your Journey

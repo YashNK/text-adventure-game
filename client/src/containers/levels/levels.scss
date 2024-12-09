@@ -1,11 +1,12 @@
-.conversation-log {
-  &::-webkit-scrollbar {
-    max-width: 10px;
-    background-color: rgb(15, 123, 54);
-    border-radius: 2px;
+.level_container {
+  .level_input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    outline: none;
+    background-color: var(--secondaryColor);
   }
-  &::-webkit-scrollbar-thumb {
-    border-radius: 2px;
-    background-color: rgb(40, 177, 90);
+  .conversation-log {
+    overflow: auto;
   }
 }

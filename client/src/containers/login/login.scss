@@ -151,6 +151,16 @@
           padding: 0px 8px;
           color: var(--white);
         }
+        &:-webkit-autofill ~ label,
+        &:focus:-webkit-autofill ~ label {
+          top: -10px;
+          left: -8px;
+          font-size: 12px;
+          border-radius: 5px;
+          background-color: transparent;
+          padding: 0px 10px;
+          color: var(--white);
+        }
       }
     }
   }

@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import User from "../model/user.js";
 import sendResponse from "../utility/utility.js";
+import Character from "../model/character.js";
 
 export const registerUser = async (req, res) => {
   const { username, password } = req.body;
@@ -56,17 +57,34 @@ export const getCurrentUser = async (req, res) => {
     if (!user) {
       return sendResponse(res, 401, "User Not Found");
     }
-    return sendResponse(
-      res,
-      200,
-      "Current User Fetched Successfully",
-      {
-        username: user.username,
-        userId: user.userId,
-      },
-      0
-    );
+    return sendResponse(res, 200, "Current User Fetched Successfully", user, 0);
   } catch (err) {
     return sendResponse(res, 400, "Server Error");
+  }
+};
+
+export const setUserCharacter = async (req, res) => {
+  const { userId } = req.params;
+  const { characterId } = req.body;
+  try {
+    const character = await Character.findOne({ characterId });
+    if (!character) {
+      return sendResponse(res, 404, "Character not found", null);
+    }
+    const user = await User.findOne({ userId });
+    if (!user) {
+      return sendResponse(res, 404, "User not found", null);
+    }
+    user.CharacterId = characterId;
+    const updatedUser = await user.save();
+    sendResponse(
+      res,
+      200,
+      "User character updated successfully",
+      updatedUser,
+      1
+    );
+  } catch (error) {
+    sendResponse(res, 500, "Server error", null);
   }
 };

@@ -8,7 +8,7 @@ import { MainContainer } from "../containers/main-container";
 import { Page } from "../constants/routes";
 import { ProtectedRoute, PublicRoute } from "../wrappers";
 import { ErrorPage } from "../containers/error-page";
-import { Characters } from "../containers/charecters";
+import { Characters } from "../containers/characters";
 import { ForbiddenPage } from "../containers/forbidden-page";
 import { LandingPage } from "../containers/landing-page";
 

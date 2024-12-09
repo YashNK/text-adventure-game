@@ -3,7 +3,7 @@ export const Page = {
   DASHBOARD: "/dashboard",
   LOGIN: "/login",
   REGISTER: "/register",
-  CHAPTERS: "/dashboard/chapters",
+  CHAPTERS: "/dashboard/chapters/:storyId",
   LEVEL: "/dashboard/level",
   CHARACTERS: "/dashboard/characters/:storyId",
   FORBIDDEN: "/forbidden",

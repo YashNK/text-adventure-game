@@ -6,7 +6,6 @@ html {
     width: 100%;
     color: var(--white);
     background-color: var(--appBackground);
-    overflow: hidden;
     .Toastify__toast-container {
       width: 350px;
     }
@@ -88,12 +87,12 @@ html {
       }
     }
     .main_card_container {
-      width: 100%;
+      border-radius: 8px;
       background-color: var(--secondaryColor);
     }
   }
 }
-@media (max-width: 768px) {
+@media (max-width: 750px) {
   .Toastify__toast-container {
     position: fixed;
     top: 40px;
@@ -116,7 +115,8 @@ html {
 ::-webkit-scrollbar-thumb {
   background: var(--primaryColor);
   border-radius: 10px;
+  transition: 0.5s;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--error);
+  background: var(--secondaryColor);
 }

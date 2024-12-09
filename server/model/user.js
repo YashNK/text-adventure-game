@@ -18,6 +18,11 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    CharacterId: {
+      type: Number,
+      required: false,
+      default: null,
+    },
   },
   {
     versionKey: false,

@@ -7,4 +7,5 @@ export const apiRoutes = {
   CURRENT_USER: `${BASE}/user/current-user`,
   STORY: `${BASE}/story/stories`,
   CHARACTERS: `${BASE}/character`,
+  SET_USER_CHARACTER: `${BASE}/user/user-character`,
 };

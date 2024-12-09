@@ -13,14 +13,13 @@ function App() {
       <ToastContainer
         transition={Slide}
         position="top-center"
-        autoClose={3000}
+        autoClose={1500}
         limit={5}
-        hideProgressBar={false}
+        hideProgressBar={true}
         newestOnTop={false}
         closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
         pauseOnHover
+        draggable
         theme="colored"
       />
       <RouterProvider router={router} />

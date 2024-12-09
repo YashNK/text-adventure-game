@@ -6,7 +6,7 @@ import { apiRoutes } from "../../constants/api-routes";
 import "./main-container.scss";
 
 export const MainContainer = () => {
-  const { fetchData } = useFetchApi();
+  const { fetchData, data: currentUser } = useFetchApi();
 
   useEffect(() => {
     fetchData(apiRoutes.CURRENT_USER, "GET");
@@ -15,7 +15,7 @@ export const MainContainer = () => {
   return (
     <div className="main_container">
       <Header />
-      <Outlet />
+      <Outlet context={{ currentUser }} />
     </div>
   );
 };

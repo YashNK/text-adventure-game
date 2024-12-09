@@ -3,7 +3,7 @@ import { GameData } from "../../constants/game";
 import "./levels.scss";
 
 export const Levels = () => {
-  const GameState = JSON.parse(localStorage.getItem("GAME_DATA"));
+  const GameState = { chapterId: 1, levelId: 1 };
   const chapter = GameData[0]?.chapters.find(
     (ch) => ch.chapterId === GameState.chapterId
   );
@@ -173,12 +173,10 @@ export const Levels = () => {
   };
 
   return (
-    <div className="h-full flex flex-col justify-between p-4 text-green-500 font-mono">
+    <div className="level_container h-full flex flex-col justify-between p-4">
       <div className="mb-2">
-        <div className="text-lg font-bold uppercase text-green-400">
-          {level?.levelTitle}
-        </div>
-        <div className="text-sm text-green-300">{level?.levelMessage}</div>
+        <div className="text-lg font-bold uppercase">{level?.levelTitle}</div>
+        <div className="text-sm">{level?.levelMessage}</div>
       </div>
       <div className="conversation-log flex-1 mb-4 overflow-y-auto px-4 py-2 rounded border border-gray-900 flex flex-col-reverse">
         <div ref={logEndRef} />
@@ -190,11 +188,11 @@ export const Levels = () => {
             return (
               <div key={index} className="text-sm whitespace-pre-line">
                 {youPart.includes("You") ? (
-                  <div className="text-green-200 pt-3">{youPart}</div>
+                  <div className="pt-3">{youPart}</div>
                 ) : (
-                  <div className="text-green-500">{youPart}</div>
+                  <div className="">{youPart}</div>
                 )}
-                {echoPart && <span className="text-green-500">{echoPart}</span>}
+                {echoPart && <span className="">{echoPart}</span>}
               </div>
             );
           })}
@@ -208,7 +206,7 @@ export const Levels = () => {
         )}
         <input
           type="text"
-          className="w-full p-2 bg-gray-800 text-green-500 rounded border border-gray-700 placeholder-green-700 focus:outline-none focus:ring-2 focus:ring-green-600"
+          className="level_input"
           placeholder="Type a command (e.g., 'look', 'go west', 'attack')"
           value={gameState.userInput}
           onChange={(e) =>
