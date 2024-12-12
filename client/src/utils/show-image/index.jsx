@@ -1,6 +1,7 @@
-import { Characters } from "../../constants";
+import { Characters, Stories } from "../../constants";
 import SYLVARA_EMBERGLINT from "../../assets/images/SYLVARA_EMBERGLINT.webp";
 import AELORIA_NIGHTSHADE from "../../assets/images/AELORIA_NIGHTSHADE.webp";
+import STORY_ONE from "../../assets/images/STORY_ONE.webp";
 
 export const showCharacter = (avatar) => {
   if (avatar === Characters.SYLVARA_EMBERGLINT) {
@@ -8,5 +9,11 @@ export const showCharacter = (avatar) => {
   }
   if (avatar === Characters.AELORIA_NIGHTSHADE) {
     return AELORIA_NIGHTSHADE;
+  }
+};
+
+export const showStory = (story) => {
+  if (story === Stories.STORY_ONE) {
+    return STORY_ONE;
   }
 };

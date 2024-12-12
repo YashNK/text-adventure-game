@@ -82,7 +82,7 @@ export const setUserCharacter = async (req, res) => {
       200,
       "User character updated successfully",
       updatedUser,
-      1
+      0
     );
   } catch (error) {
     sendResponse(res, 500, "Server error", null);

@@ -8,7 +8,10 @@ export const ErrorPage = () => {
   return (
     <div className="text-center pt-10">
       <h1>404 Page Not Found</h1>
-      <div>The page you're looking for doesn't exist or an error occurred.</div>
+      <div>
+        The page you&apos;re looking for doesn&apos;t exist or an error
+        occurred.
+      </div>
       <label
         onClick={() => navigate(Page.DASHBOARD)}
         className="text-green-500 cursor-pointer"

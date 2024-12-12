@@ -1,0 +1,93 @@
+.skeleton_container {
+  position: relative;
+  .skeleton_story_content {
+    display: flex;
+    .skeleton_title,
+    .skeleton_description,
+    .skeleton_image {
+      background-color: #6f9fa0 !important;
+      border: none !important;
+      height: 20px;
+      position: relative;
+      overflow: hidden;
+      animation: pulse 3s infinite linear;
+      background-size: 200% 100%;
+      background-image: linear-gradient(
+        to right,
+        rgb(20, 78, 92) 25%,
+        rgb(22, 96, 113) 50%,
+        rgb(20, 78, 92) 75%
+      );
+      border-radius: 4px;
+    }
+    .skeleton_image {
+      margin-right: 20px;
+      max-width: 280px;
+      height: 150px;
+    }
+    .skeleton_title {
+      width: 25%;
+      margin-bottom: 6px;
+    }
+    .skeleton_description {
+      margin-bottom: 10px;
+      width: 70%;
+      height: 35px;
+      min-width: 20px;
+    }
+  }
+  .skeleton_btn_container {
+    display: flex;
+    .skeleton_btn {
+      background-color: #6f9fa0 !important;
+      border: none !important;
+      height: 20px;
+      position: relative;
+      overflow: hidden;
+      animation: pulse 3s infinite linear;
+      background-size: 200% 100%;
+      background-image: linear-gradient(
+        to right,
+        rgb(20, 78, 92) 25%,
+        rgb(22, 96, 113) 50%,
+        rgb(20, 78, 92) 75%
+      );
+      border-radius: 4px;
+      width: 120px;
+      height: 36px;
+    }
+  }
+}
+@keyframes pulse {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
+@media (max-width: 850px) {
+  .skeleton_container {
+    .skeleton_story_content {
+      flex-direction: column;
+      .skeleton_image {
+        width: 100%;
+        max-width: none;
+        margin-bottom: 15px;
+      }
+      .skeleton_title {
+        margin-bottom: 10px;
+      }
+    }
+    .skeleton_btn {
+      padding: 0px;
+      width: 70px;
+    }
+    .skeleton_title {
+      width: 40%;
+    }
+    .skeleton_description {
+      width: 100% !important;
+    }
+  }
+}

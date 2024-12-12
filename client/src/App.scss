@@ -44,7 +44,11 @@ html {
       font-size: 12px;
     }
     .invalid_top_20 {
-      top: -20px !important;
+      top: -20px;
+    }
+    .invalid_eye {
+      top: 12px;
+      right: 12px;
     }
     .primary_btn {
       background: linear-gradient(
@@ -52,7 +56,7 @@ html {
         var(--primaryColor) 50%,
         var(--white) 50%
       );
-      background-size: 200% 100%;
+      background-size: 205% 105%;
       background-position: right bottom;
       color: var(--white);
       padding: 5px 10px;

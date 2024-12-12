@@ -1,12 +1,13 @@
+import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useFetchApi } from "../../hooks/use-fetch-api";
+// import { useFetchApi } from "../../hooks/use-fetch-api";
 import { Page } from "../../constants/routes";
 
 export const Chapters = () => {
-  const { fetchData, loading } = useFetchApi();
+  // const { fetchData, loading } = useFetchApi();
   const navigate = useNavigate();
 
-  const handleChapterSelect = (chapter) => {
+  const handleChapterSelect = () => {
     navigate(Page.LEVEL);
   };
 

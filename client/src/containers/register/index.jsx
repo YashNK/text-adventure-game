@@ -4,7 +4,9 @@ import { Page } from "../../constants/routes";
 import { useFetchApi } from "../../hooks/use-fetch-api";
 import { apiRoutes } from "../../constants/api-routes";
 import { Loader } from "../../components/loader";
-import I18 from "../../plugins/i18";
+import { EYE_OPEN } from "../../assets/svgs/eye-open";
+import { EYE_SLASHED } from "../../assets/svgs/eye-slashed";
+import I18, { i18Get } from "../../plugins/i18";
 import LazyImage from "../../utils/lazy-image";
 import RegisterImage from "../../assets/images/register.webp";
 import PlaceholderImage from "../../assets/images/register-small.webp";
@@ -34,7 +36,7 @@ export const Register = () => {
     }
   }, [data, isSuccess]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = () => {
     if (validateForm()) {
       fetchData(apiRoutes.REGISTER, "POST", {
         username: registerForm.username.toLowerCase(),
@@ -58,7 +60,7 @@ export const Register = () => {
       setInvalid((prev) => ({
         ...prev,
         password: true,
-        passwordMessage: "Password does not match",
+        passwordMessage: i18Get("PASSWORD_DOES_NOT_MATCH"),
       }));
       valid = false;
     }
@@ -66,7 +68,7 @@ export const Register = () => {
       setInvalid((prev) => ({
         ...prev,
         password: true,
-        passwordMessage: "Password should contain a special character",
+        passwordMessage: i18Get("PASSWORD_SPECIAL_CHARACTERS"),
       }));
       return false;
     }
@@ -74,7 +76,7 @@ export const Register = () => {
       setInvalid((prev) => ({
         ...prev,
         password: true,
-        passwordMessage: "Password should contain a number",
+        passwordMessage: i18Get("PASSWORD_SHOULD_CONTAIN_A_NUMBER"),
       }));
       valid = false;
     }
@@ -82,7 +84,7 @@ export const Register = () => {
       setInvalid((prev) => ({
         ...prev,
         password: true,
-        passwordMessage: "Password should contain a uppercase character",
+        passwordMessage: i18Get("PASSWORD_SHOULD_CONTAIN_UPPERCASE"),
       }));
       valid = false;
     }
@@ -90,7 +92,7 @@ export const Register = () => {
       setInvalid((prev) => ({
         ...prev,
         password: true,
-        passwordMessage: "Password should contain a lowercase character",
+        passwordMessage: i18Get("PASSWORD_SHOULD_CONTAIN_LOWERCASE"),
       }));
       valid = false;
     }
@@ -98,7 +100,7 @@ export const Register = () => {
       setInvalid((prev) => ({
         ...prev,
         password: true,
-        passwordMessage: "Password should contain 8 characters",
+        passwordMessage: i18Get("PASSWORD_SHOULD_CONTAIN_8"),
       }));
       valid = false;
     }
@@ -106,7 +108,7 @@ export const Register = () => {
       setInvalid((prev) => ({
         ...prev,
         password: true,
-        passwordMessage: "Password is Required",
+        passwordMessage: i18Get("PASSWORD_IS_REQUIRED"),
       }));
       valid = false;
     }
@@ -119,7 +121,7 @@ export const Register = () => {
         <LazyImage
           src={RegisterImage}
           placeholder={PlaceholderImage}
-          alt="Register"
+          alt={i18Get("REGISTER")}
           className="auth_image"
         />
       </div>
@@ -187,6 +189,17 @@ export const Register = () => {
             ) : (
               ""
             )}
+            <span
+              onClick={() =>
+                setShowPassword((prev) => ({
+                  ...prev,
+                  password: !showPassword.password,
+                }))
+              }
+              className="invalid invalid_eye cursor-pointer"
+            >
+              {showPassword.password ? <EYE_OPEN /> : <EYE_SLASHED />}
+            </span>
           </div>
           <div className="auth_input mb-8">
             <input
@@ -213,6 +226,17 @@ export const Register = () => {
             ) : (
               ""
             )}
+            <span
+              onClick={() =>
+                setShowPassword((prev) => ({
+                  ...prev,
+                  confirmPassword: !showPassword.confirmPassword,
+                }))
+              }
+              className="invalid invalid_eye cursor-pointer"
+            >
+              {showPassword.confirmPassword ? <EYE_OPEN /> : <EYE_SLASHED />}
+            </span>
           </div>
           <div className="pb-5">
             <button

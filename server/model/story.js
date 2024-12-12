@@ -17,6 +17,10 @@ const storySchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    storyImage: {
+      type: String,
+      required: true,
+    },
     characters: [
       {
         type: mongoose.Schema.Types.ObjectId,

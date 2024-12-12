@@ -9,8 +9,8 @@ export const ForbiddenPage = () => {
     <div className="text-center pt-10">
       <h1>Access Forbidden</h1>
       <div>
-        Your session has expired or you don't have permission to access this
-        page.
+        Your session has expired or you don&apos;t have permission to access
+        this page.
       </div>
       <label
         onClick={() => navigate(Page.LOGIN)}

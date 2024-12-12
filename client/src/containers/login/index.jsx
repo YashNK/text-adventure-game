@@ -8,14 +8,17 @@ import { LocalStorageKeys } from "../../constants";
 import LoginImage from "../../assets/images/login.webp";
 import LazyImage from "../../utils/lazy-image";
 import PlaceholderImage from "../../assets/images/login-small.webp";
-import I18 from "../../plugins/i18";
+import I18, { i18Get } from "../../plugins/i18";
 import "./login.scss";
+import { EYE_OPEN } from "../../assets/svgs/eye-open";
+import { EYE_SLASHED } from "../../assets/svgs/eye-slashed";
 
 export const Login = () => {
   const navigate = useNavigate();
   const { fetchData, isLoading, isSuccess, data } = useFetchApi();
   const [loginForm, setLoginForm] = useState({ username: "", password: "" });
   const [invalid, setInvalid] = useState({ username: false, password: false });
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     if (data && data.token && isSuccess) {
@@ -87,7 +90,7 @@ export const Login = () => {
           <div className="auth_input mb-8">
             <input
               className="min_width_200"
-              type="password"
+              type={`${showPassword ? "text" : "password"}`}
               id="password"
               value={loginForm.password}
               required
@@ -106,6 +109,12 @@ export const Login = () => {
             ) : (
               ""
             )}
+            <span
+              onClick={() => setShowPassword(!showPassword)}
+              className="invalid invalid_eye cursor-pointer"
+            >
+              {showPassword ? <EYE_OPEN /> : <EYE_SLASHED />}
+            </span>
           </div>
           <div className="pb-5">
             <button
@@ -140,7 +149,7 @@ export const Login = () => {
         <LazyImage
           src={LoginImage}
           placeholder={PlaceholderImage}
-          alt="Login"
+          alt={i18Get("LOGIN")}
           className="auth_image"
         />
       </div>
