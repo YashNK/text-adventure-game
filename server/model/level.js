@@ -17,9 +17,13 @@ const levelSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    isLastLevel: {
+      type: Boolean,
+      default: false,
+    },
     scene: [
       {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Number,
         ref: "Scene",
       },
     ],

@@ -10,6 +10,12 @@ export const showCharacter = (avatar) => {
   if (avatar === Characters.AELORIA_NIGHTSHADE) {
     return AELORIA_NIGHTSHADE;
   }
+  if (avatar === Characters.KAELEN_BLACKTHORN) {
+    return SYLVARA_EMBERGLINT;
+  }
+  if (avatar === Characters.VEYRA_DARKMOOR) {
+    return AELORIA_NIGHTSHADE;
+  }
 };
 
 export const showStory = (story) => {

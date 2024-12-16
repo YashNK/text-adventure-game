@@ -1,6 +1,6 @@
 export const LOGOUT_ICON = () => {
   return (
-    <svg fill="var(--primaryColor)" width="25" height="25" viewBox="0 0 32 32">
+    <svg fill="var(--white)" width="25" height="25" viewBox="0 0 32 32">
       <g>
         <path d="M10 20H9v-1a1 1 0 1 0-2 0v1H6a1 1 0 1 0 0 2h1v1a1 1 0 1 0 2 0v-1h1a1 1 0 1 0 0-2z"></path>
         <circle cx="24" cy="19" r="1"></circle>

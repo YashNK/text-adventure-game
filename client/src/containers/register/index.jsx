@@ -31,14 +31,14 @@ export const Register = () => {
   });
 
   useEffect(() => {
-    if (data && isSuccess) {
+    if (isSuccess) {
       navigate(Page.LOGIN);
     }
   }, [data, isSuccess]);
 
   const handleSubmit = () => {
     if (validateForm()) {
-      fetchData(apiRoutes.REGISTER, "POST", {
+      fetchData(`${apiRoutes.USER}/register`, "POST", {
         username: registerForm.username.toLowerCase(),
         password: registerForm.password,
       });

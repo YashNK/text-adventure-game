@@ -10,7 +10,7 @@ export const MainContainer = () => {
   const { fetchData, data: currentUser } = useFetchApi();
 
   useEffect(() => {
-    fetchData(apiRoutes.CURRENT_USER, "GET");
+    fetchData(`${apiRoutes.USER}/current-user`, "GET");
   }, []);
 
   return (

@@ -16,17 +16,18 @@ export const Characters = () => {
   const { fetchData: setUserCharacter } = useFetchApi();
 
   useEffect(() => {
-    fetchData(`${apiRoutes.CHARACTERS}/${storyId}`, "GET");
+    fetchData(`${apiRoutes.CHARACTER}/${storyId}`, "GET");
   }, []);
 
   const handleCharacterSelect = (id) => {
     const characterId = parseInt(id);
     if (currentUser) {
       setUserCharacter(
-        `${apiRoutes.SET_USER_CHARACTER}/${currentUser.userId}`,
-        "PUT",
+        `${apiRoutes.USER_STORY}/user/${currentUser.userId}/set-character`,
+        "POST",
         {
           characterId,
+          storyId,
         }
       );
       navigate(
@@ -66,7 +67,7 @@ export const Characters = () => {
                     />
                   </div>
                   <div className="mb-2 text-center font_30">{char.name}</div>
-                  <div className="mb-2 text-center flex_1_1_10">
+                  <div className="character_description mb-2 text-center">
                     {char.description}
                   </div>
                   <div className="">

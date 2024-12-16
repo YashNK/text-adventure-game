@@ -27,7 +27,7 @@ const chapterSchema = new mongoose.Schema(
     },
     levels: [
       {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Number,
         ref: "Level",
       },
     ],

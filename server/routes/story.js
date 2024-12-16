@@ -9,7 +9,7 @@ import authenticateToken from "../middleware/auth.js";
 
 const router = express.Router();
 
-router.get("/stories", authenticateToken, getAllStories);
+router.get("/", authenticateToken, getAllStories);
 router.get("/:id", authenticateToken, getStoryById);
 router.put("/:id", updateStoryById);
 router.post("/create-story", createStory);

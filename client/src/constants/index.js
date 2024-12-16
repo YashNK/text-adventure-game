@@ -5,6 +5,8 @@ export const LocalStorageKeys = {
 export const Characters = {
   SYLVARA_EMBERGLINT: "SYLVARA_EMBERGLINT",
   AELORIA_NIGHTSHADE: "AELORIA_NIGHTSHADE",
+  KAELEN_BLACKTHORN: "KAELEN_BLACKTHORN",
+  VEYRA_DARKMOOR: "VEYRA_DARKMOOR",
 };
 
 export const Stories = {

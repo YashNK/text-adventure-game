@@ -29,7 +29,7 @@ export const Login = () => {
 
   const handleSubmit = () => {
     if (validateForm()) {
-      fetchData(apiRoutes.LOGIN, "POST", {
+      fetchData(`${apiRoutes.USER}/login`, "POST", {
         username: loginForm.username.toLowerCase(),
         password: loginForm.password,
       });

@@ -16,7 +16,7 @@ export const Header = () => {
   return (
     <div className="header_container">
       <span
-        className="cursor-pointer primary_color font_16"
+        className="cursor-pointer font_16"
         onClick={() => navigate(Page.DASHBOARD)}
       >
         <I18 tkey="ECHO_VERSE" />

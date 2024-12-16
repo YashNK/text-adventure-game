@@ -8,6 +8,6 @@ import authenticateToken from "../middleware/auth.js";
 const router = express.Router();
 
 router.get("/:storyId", authenticateToken, getCharactersByStoryId);
-router.post("/:storyId", createCharacter);
+router.post("/", createCharacter);
 
 export default router;

@@ -13,6 +13,11 @@ export const Stories = () => {
   const navigate = useNavigate();
   const { currentUser } = useOutletContext();
   const { fetchData, isLoading, data: story } = useFetchApi();
+  const {
+    fetchData: fetchUserStoryApi,
+    data: userStoryData,
+    isLoading: userStoryLoading,
+  } = useFetchApi();
   const [viewStoryDescription, setViewStoryDescription] = useState({
     show: false,
     storyId: 0,
@@ -22,8 +27,17 @@ export const Stories = () => {
     fetchData(apiRoutes.STORY, "GET");
   }, []);
 
+  useEffect(() => {
+    if (currentUser) {
+      fetchUserStoryApi(
+        `${apiRoutes.USER_STORY}/user/${currentUser.userId}`,
+        "GET"
+      );
+    }
+  }, [currentUser]);
+
   const handleBeginJourney = (storyId) => {
-    if (currentUser.CharacterId) {
+    if (userStoryData?.find((c) => c.storyId === storyId && c.characterId)) {
       navigate(
         createNewPath(Page.CHAPTERS, {
           storyId: storyId,
@@ -47,7 +61,7 @@ export const Stories = () => {
         <I18 tkey="STORIES_DESC" />
       </div>
       <div className="flex_1_1_10 overflow-auto">
-        {isLoading ? (
+        {isLoading || userStoryLoading ? (
           <StoriesSkeletonLoader />
         ) : story && story.length > 0 ? (
           story.map((s) => (
@@ -76,7 +90,9 @@ export const Stories = () => {
                   onClick={() => handleBeginJourney(s.storyId)}
                   className="primary_btn mr-3"
                 >
-                  {currentUser?.CharacterId ? (
+                  {userStoryData?.find(
+                    (u) => u.storyId === s.storyId && u.characterId
+                  ) ? (
                     <I18 tkey="CONTINUE_JOURNEY" />
                   ) : (
                     <I18 tkey="BEGIN_YOUR_JOURNEY" />

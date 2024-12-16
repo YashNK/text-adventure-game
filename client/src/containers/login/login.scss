@@ -20,10 +20,10 @@
         top: 0px;
         left: 10px;
         font-size: 12px;
-        background-color: var(--appBackground);
+        background-color: var(--primaryColor);
         border-radius: 5px;
         padding: 0px 8px;
-        color: var(--primaryColor);
+        color: var(--white);
       }
       &:-webkit-autofill ~ label,
       &:focus:-webkit-autofill ~ label {
@@ -112,7 +112,7 @@
       background-position: 40%;
       background-size: cover;
       height: 100%;
-      border-radius: 50px;
+      border-radius: 20px;
       object-fit: cover;
       object-position: 40%;
     }
@@ -133,42 +133,12 @@
   }
 }
 @media (max-width: 750px) {
-  .auth_form_container {
-    .auth_input {
-      > input {
-        &:focus,
-        &:active,
-        &:valid {
-          border-color: var(--primaryColor) !important;
-        }
-        &:focus ~ label,
-        &:valid ~ label {
-          top: 0px;
-          left: 10px;
-          font-size: 12px;
-          background-color: var(--primaryColor);
-          border-radius: 3px;
-          padding: 0px 8px;
-          color: var(--white);
-        }
-        &:-webkit-autofill ~ label,
-        &:focus:-webkit-autofill ~ label {
-          top: -10px;
-          left: -8px;
-          font-size: 12px;
-          border-radius: 5px;
-          background-color: transparent;
-          padding: 0px 10px;
-          color: var(--white);
-        }
-      }
-    }
-  }
   .auth_image_container {
+    padding: 10px !important;
     z-index: -1;
     position: absolute;
     .auth_image {
-      opacity: 10%;
+      opacity: 30%;
       border-radius: 15px !important;
     }
   }

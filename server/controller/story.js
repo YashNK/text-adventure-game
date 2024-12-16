@@ -2,13 +2,24 @@ import sendResponse from "../utility/utility.js";
 import Story from "../model/story.js";
 import Character from "../model/character.js";
 import Chapter from "../model/chapter.js";
+import {
+  CreateStoryResponse,
+  GetOneStoryResponse,
+  UpdateStoryResponse,
+} from "../dto/story/index.js";
 
 export const getAllStories = async (req, res) => {
   try {
-    const stories = await Story.find().select("-_id -chapters -characters");
-    sendResponse(res, 200, "All Stories Fetched Successfully", stories, 0);
+    const stories = await Story.find().select("-_id");
+    return sendResponse(
+      res,
+      200,
+      "All Stories Fetched Successfully",
+      stories,
+      0
+    );
   } catch (error) {
-    sendResponse(res, 400, "Server Error");
+    return sendResponse(res, 400, "Server Error", null, 1, error.message);
   }
 };
 
@@ -16,30 +27,22 @@ export const getStoryById = async (req, res) => {
   try {
     const { id: storyId } = req.params;
     if (isNaN(storyId)) {
-      return sendResponse(res, 400, "Invalid Story ID. It should be a number.");
+      return sendResponse(res, 400, "Invalid Story ID. It should be a number");
     }
-    const story = await Story.findOne({ storyId })
-      .populate({
-        path: "chapters",
-        select: "chapterId",
-      })
-      .populate({
-        path: "characters",
-        select: "characterId",
-      });
+    const story = await Story.findOne({ storyId });
     if (!story) {
-      return sendResponse(res, 404, "Story not found");
+      return sendResponse(res, 400, "Story Not Found");
     }
-    const transformedStory = {
-      storyId: story.storyId,
-      storyTitle: story.storyTitle,
-      storyDescription: story.storyDescription,
-      chapterIds: story.chapters.map((chapter) => chapter.chapterId),
-      characterIds: story.characters.map((character) => character.characterId),
-    };
-    sendResponse(res, 200, "Story fetched successfully", transformedStory);
+    const chapters = await Chapter.find({
+      chapterId: { $in: story.chapters },
+    }).select("chapterId title");
+    const characters = await Character.find({
+      characterId: { $in: story.characters },
+    }).select("characterId name");
+    const response = GetOneStoryResponse(story, chapters, characters);
+    return sendResponse(res, 200, "Story Fetched Successfully", response, 0);
   } catch (error) {
-    sendResponse(res, 500, "Server error", null, 0);
+    return sendResponse(res, 400, "Server Error", null, 1, error.message);
   }
 };
 
@@ -60,9 +63,10 @@ export const createStory = async (req, res) => {
     }
     const newStory = new Story(storyData);
     await newStory.save();
-    sendResponse(res, 200, "Story created successfully", newStory);
+    const storyResponse = CreateStoryResponse(newStory);
+    return sendResponse(res, 200, "Story created successfully", storyResponse);
   } catch (error) {
-    sendResponse(res, 400, "Server Error");
+    return sendResponse(res, 400, "Server Error", null, 1, error.message);
   }
 };
 
@@ -77,7 +81,7 @@ export const updateStoryById = async (req, res) => {
         "Invalid Story ID. It must be a valid number."
       );
     }
-    const story = await Story.findOne({ storyId: storyId });
+    const story = await Story.findOne({ storyId });
     if (!story) {
       return sendResponse(res, 404, "Story not found");
     }
@@ -91,17 +95,18 @@ export const updateStoryById = async (req, res) => {
           "`characters` must be an array of characterId values."
         );
       }
-      const characterIds = await Character.find({
+      const validCharacters = await Character.find({
         characterId: { $in: characters },
-      }).select("_id");
-      if (characterIds.length !== characters.length) {
+      }).select("characterId");
+      const validCharacterIds = validCharacters.map((c) => c.characterId);
+      if (validCharacterIds.length !== characters.length) {
         return sendResponse(
           res,
           400,
           "Some `characterId` values do not exist in the database."
         );
       }
-      story.characters = characterIds.map((c) => c._id);
+      story.characters = validCharacterIds;
     }
     if (chapters) {
       if (!Array.isArray(chapters)) {
@@ -111,33 +116,30 @@ export const updateStoryById = async (req, res) => {
           "`chapters` must be an array of chapterId values."
         );
       }
-      const chapterIds = await Chapter.find({
+      const validChapters = await Chapter.find({
         chapterId: { $in: chapters },
-      }).select("_id");
-      if (chapterIds.length !== chapters.length) {
+      }).select("chapterId");
+      const validChapterIds = validChapters.map((c) => c.chapterId);
+      if (validChapterIds.length !== chapters.length) {
         return sendResponse(
           res,
           400,
           "Some `chapterId` values do not exist in the database."
         );
       }
-      story.chapters = chapterIds.map((c) => c._id);
+      story.chapters = validChapterIds;
     }
     const updatedStory = await story.save();
-    const resolvedCharacters = await Character.find({
-      _id: { $in: updatedStory.characters },
-    }).select("characterId");
-    const resolvedChapters = await Chapter.find({
-      _id: { $in: updatedStory.chapters },
-    }).select("chapterId");
-    sendResponse(res, 200, "Story updated successfully", {
-      storyId: updatedStory.storyId,
-      storyTitle: updatedStory.storyTitle,
-      storyDescription: updatedStory.storyDescription,
-      characters: resolvedCharacters.map((c) => c.characterId),
-      chapters: resolvedChapters.map((c) => c.chapterId),
-    });
+    const response = UpdateStoryResponse(updatedStory);
+    return sendResponse(res, 200, "Story updated successfully", response);
   } catch (error) {
-    sendResponse(res, 500, "Failed to update story", null, 0);
+    return sendResponse(
+      res,
+      400,
+      "Failed to update story",
+      null,
+      1,
+      error.message
+    );
   }
 };

@@ -4,7 +4,7 @@ export const Page = {
   LOGIN: "/login",
   REGISTER: "/register",
   CHAPTERS: "/dashboard/chapters/:storyId",
-  LEVEL: "/dashboard/level",
+  LEVEL: "/dashboard/level/:chapterId",
   CHARACTERS: "/dashboard/characters/:storyId",
   FORBIDDEN: "/forbidden",
 };

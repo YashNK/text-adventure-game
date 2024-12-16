@@ -1,0 +1,22 @@
+.skeleton_character_card_container {
+  .skeleton_character_card_image,
+  .skeleton_character_description,
+  .skeleton_character_footer {
+    border-radius: 5px;
+    width: 100%;
+    background-image: linear-gradient(
+      to right,
+      rgb(20, 78, 92) 25%,
+      rgb(22, 96, 113) 50%,
+      rgb(20, 78, 92) 75%
+    );
+    animation: pulse 3s infinite linear;
+    background-size: 200% 100%;
+  }
+  .skeleton_character_card_image {
+    height: 100%;
+  }
+  .skeleton_character_footer {
+    height: 90px;
+  }
+}

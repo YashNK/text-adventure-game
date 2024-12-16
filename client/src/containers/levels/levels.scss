@@ -1,12 +1,42 @@
 .level_container {
-  .level_input {
-    width: 100%;
-    padding: 10px;
-    border-radius: 5px;
-    outline: none;
-    background-color: var(--secondaryColor);
+  display: flex;
+  flex: 1 1 10px;
+  .level_sidebar {
+    min-width: 300px;
+    max-width: 300px;
+    margin: 0px 10px 20px 0px;
+    padding: 20px;
   }
-  .conversation-log {
-    overflow: auto;
+  .level_content {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    .conversation_log {
+      background: var(--authInputBorderColor);
+      padding: 10px;
+      border-radius: 4px;
+      margin: 20px 0px;
+      overflow-y: auto;
+    }
+    .level_input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #3c7ea2;
+      background: rgb(26, 68, 93);
+      color: var(--white);
+      outline: none;
+    }
+  }
+}
+@media (max-width: 750px) {
+  .level_container {
+    flex-direction: column;
+    .level_sidebar {
+      max-width: 100% !important;
+      margin: 0px 0px 20px 0px;
+    }
   }
 }

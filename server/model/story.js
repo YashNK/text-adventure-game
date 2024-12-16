@@ -23,13 +23,13 @@ const storySchema = new mongoose.Schema(
     },
     characters: [
       {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Number,
         ref: "Character",
       },
     ],
     chapters: [
       {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Number,
         ref: "Chapter",
       },
     ],

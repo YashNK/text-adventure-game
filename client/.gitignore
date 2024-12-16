@@ -2,7 +2,7 @@
 
 # dependencies
 /node_modules
-/src/containers/game
+/src/constants/gameData
 /.pnp
 .pnp.js
 .env

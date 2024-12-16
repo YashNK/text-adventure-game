@@ -1,222 +1,200 @@
-import React, { useState, useRef, useEffect } from "react";
-import { GameData } from "../../constants/game";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useOutletContext, useParams } from "react-router-dom";
+import { useFetchApi } from "../../hooks/use-fetch-api";
+import { apiRoutes } from "../../constants/api-routes";
 import "./levels.scss";
+import { createNewPath } from "../../utils";
+import { Page } from "../../constants/routes";
 
 export const Levels = () => {
-  const GameState = { chapterId: 1, levelId: 1 };
-  const chapter = GameData[0]?.chapters.find(
-    (ch) => ch.chapterId === GameState.chapterId
+  const navigate = useNavigate();
+  const { chapterId } = useParams();
+  const { currentUser } = useOutletContext();
+  const { fetchData, data: levelData, isSuccess } = useFetchApi();
+  const { fetchData: UserCharacterApi, data: UserCharacterData } =
+    useFetchApi();
+  const [currentLevelId, setCurrentLevelId] = useState(0);
+  const [command, setCommand] = useState("");
+  const [conversationLog, setConversationLog] = useState([]);
+  const [openSideBar, setOpenSidebar] = useState(false);
+  const currentLevel = levelData?.find(
+    (level) => level.levelId === currentLevelId
   );
-  const level = chapter?.levels.find(
-    (lvl) => lvl.levelId === GameState.levelId
-  );
-  const [gameState, setGameState] = useState({
-    chapterId: GameState.chapterId,
-    levelId: GameState.levelId,
-    sceneId: 1,
-    userInput: "",
-    monsterHealth: null,
-    conversationLog: [],
-  });
-  const currentScene = level?.scene.find(
-    (scene) => scene.sceneId === gameState.sceneId
-  );
-  const logEndRef = useRef(null);
+  const currentScene = currentLevel?.scene;
+  const sceneOption = currentScene?.sceneOptions?.[0];
 
   useEffect(() => {
-    logEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [gameState.conversationLog]);
+    fetchData(`${apiRoutes.LEVEL}/${chapterId}`, "GET");
+    UserCharacterApi(
+      `${apiRoutes.USER_STORY}/users/1/stories/1/character`,
+      "GET"
+    );
+  }, []);
+
+  useEffect(() => {
+    if (levelData && isSuccess) {
+      const initialLevelId = levelData[0]?.levelId;
+      setCurrentLevelId(initialLevelId);
+    }
+  }, [isSuccess]);
 
   useEffect(() => {
     if (currentScene) {
-      setGameState((prevState) => ({
-        ...prevState,
-        conversationLog: [
-          ...prevState.conversationLog,
-          `Echo: ${currentScene.sceneMessage}`,
-        ],
-      }));
+      setConversationLog([
+        ...conversationLog,
+        `Echo: ${currentScene?.sceneMessage}`,
+      ]);
     }
   }, [currentScene]);
 
-  const addToConversationLog = (message) => {
-    setGameState((prevState) => ({
-      ...prevState,
-      conversationLog: [...prevState.conversationLog, message],
-    }));
-  };
-
-  const handleLook = () => {
-    const lookOption = currentScene?.sceneOptions.find((opt) => opt.look);
-    addToConversationLog(
-      `You: look\nEcho: ${lookOption?.look || "Nothing of interest here."}`
-    );
-  };
-
-  const handleMove = (direction) => {
-    const directionOption = currentScene?.sceneOptions.find(
-      (opt) => opt[direction]
-    );
-    if (directionOption) {
-      setGameState((prevState) => ({
-        ...prevState,
-        sceneId: directionOption[direction],
-      }));
-    } else {
-      addToConversationLog(
-        `You: go ${direction}\nEcho: You can't go that way.`
-      );
-    }
-  };
-
-  const handleAttack = () => {
-    const attackOption = currentScene?.sceneOptions.find((opt) => opt.attack);
-    if (!attackOption)
-      return addToConversationLog("Echo: Nothing to attack here.");
-
-    const { monsterName = "The monster", monsterHealth: initialHealth } =
-      attackOption.attack[0];
-
-    setGameState((prevState) => {
-      if (prevState.monsterHealth === 0) {
-        return prevState;
-      } else {
-        const newMonsterHealth =
-          prevState.monsterHealth === null
-            ? initialHealth
-            : prevState.monsterHealth - 10;
-
-        return {
-          ...prevState,
-          monsterHealth: newMonsterHealth < 0 ? 0 : newMonsterHealth,
-          conversationLog: [
-            ...prevState.conversationLog,
-            `You: attack\nEcho: You attack ${monsterName}! It now has ${newMonsterHealth} health remaining.`,
-          ],
-        };
+  useEffect(() => {
+    if (currentScene) {
+      if (sceneOption.startNewChapter > 0) {
+        setConversationLog([...conversationLog, `Echo: Chapter Completed`]);
       }
-    });
-
-    if (gameState.monsterHealth <= 0 && gameState.monsterHealth !== null) {
-      addToConversationLog(`Echo: ${monsterName} has been defeated!`);
     }
-  };
+  }, [currentScene]);
 
-  const handleFlee = () => {
-    const fleeOption = currentScene?.sceneOptions.find((opt) => opt.flee);
-    if (fleeOption) {
-      setGameState((prevState) => ({
-        ...prevState,
-        sceneId: fleeOption.flee,
-        conversationLog: [
-          ...prevState.conversationLog,
-          "You: flee\nEcho: You fled the scene!",
-        ],
-      }));
+  const handleCommand = () => {
+    if (command.includes("look")) {
+      const lookMessage =
+        `Echo: ${sceneOption?.look}` || "Echo: There's nothing to see here.";
+      setConversationLog([...conversationLog, `You: ${command}`, lookMessage]);
+    } else if (command.includes("north")) {
+      if (sceneOption?.north) {
+        setConversationLog([
+          ...conversationLog,
+          `You: ${command}`,
+          "Echo: You move north.",
+        ]);
+        setCurrentLevelId(sceneOption.north);
+      } else {
+        setConversationLog([
+          ...conversationLog,
+          `You: ${command}`,
+          "Echo: You can not go that way",
+        ]);
+      }
+    } else if (command.includes("south")) {
+      if (sceneOption?.south) {
+        setConversationLog([
+          ...conversationLog,
+          `You: ${command}`,
+          "Echo: You move north.",
+        ]);
+        setCurrentLevelId(sceneOption.south);
+      } else {
+        setConversationLog([
+          ...conversationLog,
+          `You: ${command}`,
+          "Echo: You can not go that way",
+        ]);
+      }
+    } else if (command.includes("east")) {
+      if (sceneOption?.east) {
+        setConversationLog([
+          ...conversationLog,
+          `You: ${command}`,
+          "Echo: You move east.",
+        ]);
+        setCurrentLevelId(sceneOption.east);
+      } else {
+        setConversationLog([
+          ...conversationLog,
+          `You: ${command}`,
+          "Echo: You can not go that way",
+        ]);
+      }
+    } else if (command.includes("west")) {
+      if (sceneOption?.west) {
+        setConversationLog([
+          ...conversationLog,
+          `You: ${command}`,
+          "Echo: You move west.",
+        ]);
+        setCurrentLevelId(sceneOption.west);
+      } else {
+        setConversationLog([
+          ...conversationLog,
+          `You: ${command}`,
+          "Echo: You can not go that way",
+        ]);
+      }
     } else {
-      addToConversationLog("You: flee\nEcho: No need to flee.");
+      setConversationLog([
+        ...conversationLog,
+        `You: ${command}`,
+        "Echo: Invalid command.",
+      ]);
     }
+    setCommand("");
   };
 
-  const handleNewChapter = () => {
-    const newChapterOption = currentScene?.sceneOptions.find(
-      (opt) => opt.startNewChapter
-    );
-    if (newChapterOption) {
-      localStorage.setItem(
-        "GAME_DATA",
-        JSON.stringify({
-          chapterId: GameState.chapterId + 1,
-          levelId: 1,
+  const handleNextChapter = () => {
+    if (sceneOption && sceneOption.startNewChapter > 0) {
+      navigate(
+        createNewPath(Page.LEVEL, {
+          chapterId: sceneOption.startNewChapter,
         })
       );
-      setGameState({
-        chapterId: GameState.chapterId,
-        levelId: 1,
-        sceneId: 1,
-        userInput: "",
-        monsterHealth: null,
-        conversationLog: [],
-      });
-      addToConversationLog("Echo: You have started Chapter 2!");
-    } else {
-      addToConversationLog(
-        "You: start new chapter\nEcho: This option is not available in the current scene."
-      );
+      fetchData(`${apiRoutes.LEVEL}/${sceneOption.startNewChapter}`, "GET");
+      setConversationLog([]);
     }
-  };
-
-  const commandMap = {
-    look: handleLook,
-    west: () => handleMove("west"),
-    east: () => handleMove("east"),
-    south: () => handleMove("south"),
-    north: () => handleMove("north"),
-    attack: handleAttack,
-    start: () => handleNewChapter("start"),
-    flee: handleFlee,
-  };
-
-  const handleUserInput = () => {
-    const command = gameState.userInput.trim().toLowerCase();
-    const commandHandler = Object.keys(commandMap).find((cmd) =>
-      command.includes(cmd)
-    );
-    if (commandHandler) {
-      commandMap[commandHandler]();
-    } else {
-      addToConversationLog(
-        "Echo: Invalid command. Try 'look', 'go west', 'attack', etc."
-      );
-    }
-    setGameState((prevState) => ({ ...prevState, userInput: "" }));
   };
 
   return (
-    <div className="level_container h-full flex flex-col justify-between p-4">
-      <div className="mb-2">
-        <div className="text-lg font-bold uppercase">{level?.levelTitle}</div>
-        <div className="text-sm">{level?.levelMessage}</div>
-      </div>
-      <div className="conversation-log flex-1 mb-4 overflow-y-auto px-4 py-2 rounded border border-gray-900 flex flex-col-reverse">
-        <div ref={logEndRef} />
-        {gameState.conversationLog
-          .slice()
-          .reverse()
-          .map((entry, index) => {
-            const [youPart, echoPart] = entry.split("\n", 2);
-            return (
-              <div key={index} className="text-sm whitespace-pre-line">
-                {youPart.includes("You") ? (
-                  <div className="pt-3">{youPart}</div>
-                ) : (
-                  <div className="">{youPart}</div>
-                )}
-                {echoPart && <span className="">{echoPart}</span>}
-              </div>
-            );
-          })}
-      </div>
-      <div className="mt-2">
-        {gameState.monsterHealth !== null && (
-          <div className="text-sm text-red-500 mb-2">
-            Monster Health:{" "}
-            {gameState.monsterHealth > 0 ? gameState.monsterHealth : "Defeated"}
+    <div className="level_container">
+      <div
+        onClick={() => setOpenSidebar(!openSideBar)}
+        className="level_sidebar main_card_container"
+      >
+        <div className="flex items-center justify-between">
+          <span>{currentUser?.username}</span>
+          <span>Level 1</span>
+        </div>
+        {openSideBar ? (
+          <div>
+            {" "}
+            <div>Character Name: {UserCharacterData?.name}</div>
+            <div>Health: {UserCharacterData?.health}</div>
+            <div>Attack Power: {UserCharacterData?.attackPower}</div>
+            <div>Special Ability: {UserCharacterData?.specialAbility}</div>
+            <div>Character Description: {UserCharacterData?.description}</div>
           </div>
+        ) : (
+          ""
         )}
-        <input
-          type="text"
-          className="level_input"
-          placeholder="Type a command (e.g., 'look', 'go west', 'attack')"
-          value={gameState.userInput}
-          onChange={(e) =>
-            setGameState((prevState) => ({
-              ...prevState,
-              userInput: e.target.value,
-            }))
-          }
-          onKeyDown={(e) => e.key === "Enter" && handleUserInput()}
-        />
+      </div>
+      <div className="level_content main_card_container">
+        <div>
+          <div className="font_12 pb-3">
+            Location: {currentLevel?.levelTitle}
+          </div>
+          <div>{currentLevel?.levelMessage}</div>
+        </div>
+        <div className="conversation_log flex_1_1_10">
+          {conversationLog.map((entry, index) => (
+            <div key={index} style={{ margin: 0 }}>
+              {entry}
+            </div>
+          ))}
+        </div>
+        <div className="flex">
+          <input
+            className="level_input"
+            type="text"
+            value={command}
+            onChange={(e) => setCommand(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handleCommand()}
+            placeholder="Type your command (e.g., look, north)..."
+          />
+          <button
+            onClick={() => handleNextChapter()}
+            className="primary_btn mx-2 min_width_120"
+          >
+            Next Chapter
+          </button>
+        </div>
       </div>
     </div>
   );

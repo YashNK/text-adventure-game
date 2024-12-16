@@ -13,22 +13,25 @@ const sceneOptionSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    west: {
+    north: {
       type: Number,
     },
-    north: {
+    south: {
       type: Number,
     },
     east: {
       type: Number,
     },
-    attack: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Monster",
-      },
-    ],
+    west: {
+      type: Number,
+    },
+    attack: {
+      type: Number,
+    },
     startNewChapter: {
+      type: Number,
+    },
+    search: {
       type: Number,
     },
   },

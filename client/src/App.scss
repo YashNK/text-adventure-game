@@ -5,7 +5,8 @@ html {
     height: 100%;
     width: 100%;
     color: var(--white);
-    background-color: var(--appBackground);
+    background: radial-gradient(circle at 50% -15%, #16536c, #0c1c25, #031923);
+
     .Toastify__toast-container {
       width: 350px;
     }
@@ -23,6 +24,9 @@ html {
     }
     .primary_color {
       color: var(--primaryColor);
+    }
+    .min_width_120 {
+      min-width: 120px !important;
     }
     .min_width_200 {
       min-width: 200px !important;
@@ -93,6 +97,7 @@ html {
     .main_card_container {
       border-radius: 8px;
       background-color: var(--secondaryColor);
+      border-top: 5px solid var(--primaryColor);
     }
   }
 }
