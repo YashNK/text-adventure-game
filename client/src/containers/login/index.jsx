@@ -5,13 +5,11 @@ import { useFetchApi } from "../../hooks/use-fetch-api";
 import { apiRoutes } from "../../constants/api-routes";
 import { Loader } from "../../components/loader";
 import { LocalStorageKeys } from "../../constants";
-import LoginImage from "../../assets/images/login.webp";
-import LazyImage from "../../utils/lazy-image";
-import PlaceholderImage from "../../assets/images/login-small.webp";
-import I18, { i18Get } from "../../plugins/i18";
-import "./login.scss";
 import { EYE_OPEN } from "../../assets/svgs/eye-open";
 import { EYE_SLASHED } from "../../assets/svgs/eye-slashed";
+import LoginImage from "../../assets/images/login.webp";
+import I18, { i18Get } from "../../plugins/i18";
+import "./login.scss";
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -146,12 +144,7 @@ export const Login = () => {
         </div>
       </div>
       <div className="auth_image_container">
-        <LazyImage
-          src={LoginImage}
-          placeholder={PlaceholderImage}
-          alt={i18Get("LOGIN")}
-          className="auth_image"
-        />
+        <img src={LoginImage} alt={i18Get("LOGIN")} className="auth_image" />
       </div>
     </div>
   );

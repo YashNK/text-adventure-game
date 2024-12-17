@@ -7,9 +7,7 @@ import { Loader } from "../../components/loader";
 import { EYE_OPEN } from "../../assets/svgs/eye-open";
 import { EYE_SLASHED } from "../../assets/svgs/eye-slashed";
 import I18, { i18Get } from "../../plugins/i18";
-import LazyImage from "../../utils/lazy-image";
 import RegisterImage from "../../assets/images/register.webp";
-import PlaceholderImage from "../../assets/images/register-small.webp";
 
 export const Register = () => {
   const navigate = useNavigate();
@@ -118,9 +116,8 @@ export const Register = () => {
   return (
     <div className="auth_form_container h-full overflow-auto flex items-center justify-around">
       <div className="auth_image_container">
-        <LazyImage
+        <img
           src={RegisterImage}
-          placeholder={PlaceholderImage}
           alt={i18Get("REGISTER")}
           className="auth_image"
         />

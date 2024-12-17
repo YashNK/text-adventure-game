@@ -9,7 +9,7 @@ import "./assets/fonts.scss";
 
 function App() {
   return (
-    <div className="h-screen">
+    <div className="h-full">
       <ToastContainer
         transition={Slide}
         position="top-center"
