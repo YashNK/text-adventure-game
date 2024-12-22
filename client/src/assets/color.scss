@@ -1,12 +1,15 @@
 :root {
   --primaryColor: #0c86c8;
+  --disabledPrimaryColor: #082d4e;
   --secondaryColor: rgb(14, 61, 72);
+  --disabledSecondaryColor: #0b2734;
   --appBackground: #0b0b0b;
   --landingPageBg: #081319;
   --white: #ffffff;
   --black: #000000;
   --gray: #838383;
-  --error: #501f73;
+  --grayLight: #d2d2d2;
+  --error: #e72d43;
   --authInputBorderColor: rgba(106, 126, 161, 0.2);
   --scrollbarBg: rgba(106, 126, 161, 0.7);
 }

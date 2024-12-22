@@ -1,0 +1,103 @@
+.level_sidebar {
+  overflow: auto;
+  min-width: 300px;
+  max-width: 300px;
+  margin-left: 10px;
+  display: flex;
+  flex-direction: column;
+  .character_container {
+    background: var(--authInputBorderColor);
+    flex: 1 1 10px;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    overflow-y: auto;
+    .dropdown_container {
+      cursor: pointer;
+      > svg {
+        transition: transform 0.3s ease;
+      }
+      &.closed {
+        > svg {
+          transform: rotate(180deg);
+        }
+      }
+    }
+    .character_details {
+      &.character_details_open,
+      &.character_details_closed {
+        transition: opacity 0.3s ease, max-height 0.3s ease;
+        overflow: hidden;
+      }
+      &.character_details_open {
+        opacity: 0;
+        max-height: 0;
+      }
+      &.character_details_closed {
+        opacity: 1;
+        max-height: 550px;
+      }
+      .character_image_container {
+        padding-top: 10px;
+        .character_image {
+          max-height: 200px;
+          border-radius: 8px;
+          height: 100%;
+          width: 100%;
+          object-fit: cover;
+        }
+      }
+    }
+    .tab_main_container {
+      display: flex;
+      flex-direction: column;
+      .tab_container {
+        display: flex;
+        align-items: center;
+        .tab_header {
+          text-align: center;
+          cursor: pointer;
+          flex: 1 1 10px;
+          padding: 6px 0px;
+          border-radius: 4px;
+          margin: 0px 2px;
+          background-color: var(--secondaryColor);
+          transition: 0.3s;
+          &.selected {
+            background-color: var(--primaryColor) !important;
+          }
+        }
+      }
+      .selected_tab_container {
+        padding: 8px;
+        overflow: auto;
+        flex: 1 1 300px;
+        margin-top: 10px;
+        background-color: var(--secondaryColor);
+      }
+    }
+  }
+}
+@media (max-width: 750px) {
+  .level_sidebar {
+    max-width: 100% !important;
+    margin-top: 20px;
+    margin-left: 0px;
+    transition: flex 0.3s ease;
+    &.mobile_sidebar_closed {
+      flex: 0 0 125px;
+    }
+    &.mobile_sidebar_open {
+      flex: 1 1 10px;
+    }
+    .character_container {
+      .tab_main_container {
+        &.mobile_tabs_hidden {
+          opacity: 0;
+          overflow: hidden;
+          max-height: 0px;
+        }
+      }
+    }
+  }
+}

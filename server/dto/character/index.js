@@ -1,4 +1,4 @@
-export const CreateCharacterResponse = (Character) => {
+export const CreateAndUpdateCharacterResponse = (Character) => {
   return {
     characterId: Character.characterId,
     name: Character.name,

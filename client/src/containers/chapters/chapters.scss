@@ -1,0 +1,8 @@
+.chapters_container {
+  &.disabled {
+    cursor: not-allowed !important;
+    background-color: var(--disabledSecondaryColor) !important;
+    border-color: var(--disabledPrimaryColor);
+    color: var(--gray);
+  }
+}

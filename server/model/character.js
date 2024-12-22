@@ -29,6 +29,10 @@ const characterSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    class: {
+      type: String,
+      require: true,
+    },
     avatar: {
       type: String,
       required: false,

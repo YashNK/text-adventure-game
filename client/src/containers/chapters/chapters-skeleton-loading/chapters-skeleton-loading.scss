@@ -1,0 +1,40 @@
+.chapters_skeleton_container {
+  .chapters_skeleton_card {
+    min-height: 80px;
+    overflow: hidden;
+    .chapters_skeleton_title,
+    .chapters_skeleton_description {
+      border-radius: 4px;
+      background-image: linear-gradient(
+        to right,
+        rgb(20, 78, 92) 25%,
+        rgb(22, 96, 113) 50%,
+        rgb(20, 78, 92) 75%
+      );
+      animation: pulse 3s infinite linear;
+      background-size: 200% 100%;
+    }
+    .chapters_skeleton_title {
+      width: 150px;
+      height: 15px;
+    }
+    .chapters_skeleton_description {
+      margin-top: 10px;
+      width: 450px;
+      height: 15px;
+    }
+  }
+}
+@media (max-width: 850px) {
+  .chapters_skeleton_container {
+    .chapters_skeleton_card {
+      min-height: 120px;
+      .chapters_skeleton_title {
+        width: 100px !important;
+      }
+      .chapters_skeleton_description {
+        width: 200px !important;
+      }
+    }
+  }
+}

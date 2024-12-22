@@ -1,5 +1,6 @@
 export const LocalStorageKeys = {
   TOKEN: "TOKEN",
+  SELECTED_LANGUAGE: "SELECTED_LANGUAGE",
 };
 
 export const Characters = {

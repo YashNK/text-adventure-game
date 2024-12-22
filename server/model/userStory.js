@@ -17,17 +17,23 @@ const userStorySchema = new mongoose.Schema(
     characterId: {
       type: Number,
       ref: "Character",
+      required: false,
     },
     storyId: {
       type: Number,
       ref: "Story",
+      required: false,
     },
-    itemId: [
+    itemIds: [
       {
         type: Number,
         ref: "Item",
       },
     ],
+    currentCharacterHealth: {
+      type: Number,
+      required: false,
+    },
   },
   {
     versionKey: false,
@@ -37,5 +43,5 @@ const userStorySchema = new mongoose.Schema(
 userStorySchema.plugin(autoIncrement, {
   inc_field: "userStoryId",
 });
-const UserStory = mongoose.model("userStory", userStorySchema);
+const UserStory = mongoose.model("UserStory", userStorySchema);
 export default UserStory;

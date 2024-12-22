@@ -27,12 +27,14 @@ const sceneOptionSchema = new mongoose.Schema(
     },
     attack: {
       type: Number,
+      ref: "Monster",
     },
     startNewChapter: {
       type: Number,
     },
     search: {
       type: Number,
+      ref: "Item",
     },
   },
   {

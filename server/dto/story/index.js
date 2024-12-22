@@ -1,3 +1,19 @@
+export const GetAllStoriesResponse = (stories, userStories) => {
+  return stories.map((story, storyIndex) => {
+    const filteredUserStories = userStories.filter(
+      (userStory) => userStory.storyId === story.storyId
+    );
+    return {
+      storyId: story.storyId,
+      storyTitle: story.storyTitle,
+      storyDescription: story.storyDescription,
+      storyImage: story.storyImage,
+      characterId: filteredUserStories[storyIndex].characterId,
+      itemIds: filteredUserStories[storyIndex].itemIds,
+    };
+  });
+};
+
 export const GetOneStoryResponse = (story, chapters, characters) => {
   return {
     storyId: story.storyId,

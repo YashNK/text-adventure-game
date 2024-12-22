@@ -2,15 +2,13 @@ import express from "express";
 import {
   createStory,
   getAllStories,
-  getStoryById,
   updateStoryById,
 } from "../controller/story.js";
 import authenticateToken from "../middleware/auth.js";
 
 const router = express.Router();
 
-router.get("/", authenticateToken, getAllStories);
-router.get("/:id", authenticateToken, getStoryById);
+router.get("/stories/:userId", authenticateToken, getAllStories);
 router.put("/:id", updateStoryById);
 router.post("/create-story", createStory);
 

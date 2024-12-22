@@ -4,11 +4,13 @@ import { useFetchApi } from "../../hooks/use-fetch-api";
 import { Page } from "../../constants/routes";
 import { apiRoutes } from "../../constants/api-routes";
 import { createNewPath } from "../../utils";
+import { ChapterSkeletonLoading } from "./chapters-skeleton-loading";
+import "./chapters.scss";
 
 export const Chapters = () => {
   const navigate = useNavigate();
   const { storyId } = useParams();
-  const { fetchData, data, loading } = useFetchApi();
+  const { fetchData, data: chapters, isLoading } = useFetchApi();
 
   useEffect(() => {
     fetchData(`${apiRoutes.CHAPTER}/story/${storyId}`, "GET");
@@ -17,25 +19,33 @@ export const Chapters = () => {
   const handleChapterSelect = (chapterId) => {
     navigate(
       createNewPath(Page.LEVEL, {
+        storyId: storyId,
         chapterId: chapterId,
       })
     );
   };
 
   return (
-    <div className="">
+    <div>
       <div className="pb-3">Chapters:</div>
-      {data?.map((c) => (
-        <div key={c.chapterId} className="chapters_container">
+      {isLoading ? (
+        <ChapterSkeletonLoading />
+      ) : (
+        chapters?.map((c) => (
           <div
-            onClick={() => handleChapterSelect(c.chapterId)}
-            className="w-full p-5 mb-3 main_card_container cursor-pointer"
+            key={c.chapterId}
+            onClick={() => {
+              if (c.isActive) handleChapterSelect(c.chapterId);
+            }}
+            className={`chapters_container w-full p-5 mb-3 main_card_container cursor-pointer ${
+              c.isActive ? "" : "disabled"
+            }`}
           >
             <div className="">{c.chapterTitle}</div>
             <div className="">{c.chapterDescription}</div>
           </div>
-        </div>
-      ))}
+        ))
+      )}
     </div>
   );
 };

@@ -101,18 +101,23 @@ html {
   }
 }
 @media (max-width: 750px) {
-  .Toastify__toast-container {
-    position: fixed;
-    top: 40px;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 80%;
-  }
-  .primary_btn {
-    min-width: 40px;
-  }
-  .secondary_btn {
-    min-width: 40px;
+  html {
+    body {
+      overflow: hidden;
+      .Toastify__toast-container {
+        position: fixed;
+        top: 40px;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 80%;
+      }
+      .primary_btn {
+        min-width: 40px;
+      }
+      .secondary_btn {
+        min-width: 40px;
+      }
+    }
   }
 }
 ::-webkit-scrollbar {

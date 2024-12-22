@@ -9,7 +9,6 @@ export const useFetchApi = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState(null);
   const [isSuccess, setIsSuccess] = useState(null);
-
   const fetchData = async (apiRoute, apiMethod, reqBody = null) => {
     setIsLoading(true);
     setData(null);

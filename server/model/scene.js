@@ -13,21 +13,13 @@ const sceneSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    hasNextScene: {
-      type: Boolean,
-    },
     hasMonster: {
       type: Boolean,
     },
-    nextSceneId: {
+    sceneOptions: {
       type: Number,
+      ref: "SceneOption",
     },
-    sceneOptions: [
-      {
-        type: Number,
-        ref: "SceneOption",
-      },
-    ],
   },
   {
     versionKey: false,

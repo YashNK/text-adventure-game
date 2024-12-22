@@ -13,31 +13,19 @@ export const Stories = () => {
   const navigate = useNavigate();
   const { currentUser } = useOutletContext();
   const { fetchData, isLoading, data: story } = useFetchApi();
-  const {
-    fetchData: fetchUserStoryApi,
-    data: userStoryData,
-    isLoading: userStoryLoading,
-  } = useFetchApi();
   const [viewStoryDescription, setViewStoryDescription] = useState({
     show: false,
     storyId: 0,
   });
 
   useEffect(() => {
-    fetchData(apiRoutes.STORY, "GET");
-  }, []);
-
-  useEffect(() => {
     if (currentUser) {
-      fetchUserStoryApi(
-        `${apiRoutes.USER_STORY}/user/${currentUser.userId}`,
-        "GET"
-      );
+      fetchData(`${apiRoutes.STORY}/stories/${currentUser.userId}`, "GET");
     }
   }, [currentUser]);
 
-  const handleBeginJourney = (storyId) => {
-    if (userStoryData?.find((c) => c.storyId === storyId && c.characterId)) {
+  const handleBeginJourney = (storyId, storyIndex) => {
+    if (story[storyIndex].characterId > 0) {
       navigate(
         createNewPath(Page.CHAPTERS, {
           storyId: storyId,
@@ -61,10 +49,10 @@ export const Stories = () => {
         <I18 tkey="STORIES_DESC" />
       </div>
       <div className="flex_1_1_10 overflow-auto">
-        {isLoading || userStoryLoading ? (
+        {isLoading ? (
           <StoriesSkeletonLoader />
         ) : story && story.length > 0 ? (
-          story.map((s) => (
+          story.map((s, storyIndex) => (
             <div
               key={s.storyId}
               className="main_card_container story_card_container mb-3"
@@ -82,20 +70,18 @@ export const Stories = () => {
                       : ""
                   } story_card_description`}
                 >
-                  {s.storyDescription}
+                  <span className="text-ellipsis">{s.storyDescription}</span>
                 </div>
               </div>
               <div className="story_btn_container">
                 <button
-                  onClick={() => handleBeginJourney(s.storyId)}
+                  onClick={() => handleBeginJourney(s.storyId, storyIndex)}
                   className="primary_btn mr-3"
                 >
-                  {userStoryData?.find(
-                    (u) => u.storyId === s.storyId && u.characterId
-                  ) ? (
-                    <I18 tkey="CONTINUE_JOURNEY" />
-                  ) : (
+                  {s.characterId <= 0 ? (
                     <I18 tkey="BEGIN_YOUR_JOURNEY" />
+                  ) : (
+                    <I18 tkey="CONTINUE_JOURNEY" />
                   )}
                 </button>
                 <button

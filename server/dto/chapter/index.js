@@ -1,4 +1,4 @@
-export const CreateChapterResponse = (chapter) => {
+export const CreateAndUpdateChapterResponse = (chapter) => {
   return {
     chapterId: chapter.chapterId,
     chapterTitle: chapter.chapterTitle,

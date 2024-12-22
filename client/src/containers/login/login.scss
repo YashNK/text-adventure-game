@@ -107,13 +107,11 @@
     height: 100%;
     width: 100%;
     flex: 1 1 10px;
-    padding: 30px;
     .auth_image {
       background-position: 40%;
       background-size: cover;
       height: 100%;
       width: 100%;
-      border-radius: 20px;
       object-fit: cover;
       object-position: 40%;
     }
@@ -135,12 +133,10 @@
 }
 @media (max-width: 750px) {
   .auth_image_container {
-    padding: 10px !important;
     z-index: -1;
     position: absolute;
     .auth_image {
       opacity: 30%;
-      border-radius: 15px !important;
     }
   }
 }

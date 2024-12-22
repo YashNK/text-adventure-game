@@ -22,6 +22,18 @@ const itemSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    healing: {
+      type: String,
+      required: false,
+    },
+    strength: {
+      type: String,
+      required: false,
+    },
+    magic: {
+      type: String,
+      required: false,
+    },
   },
   {
     versionKey: false,
@@ -31,5 +43,5 @@ const itemSchema = new mongoose.Schema(
 itemSchema.plugin(autoIncrement, {
   inc_field: "itemId",
 });
-const userCharacterChapter = mongoose.model("item", itemSchema);
+const userCharacterChapter = mongoose.model("Item", itemSchema);
 export default userCharacterChapter;

@@ -1,4 +1,4 @@
-export const CreateSceneOptionResponse = (sceneOption) => {
+export const CreateAndUpdateSceneOptionResponse = (sceneOption) => {
   return {
     sceneOptionId: sceneOption.sceneOptionId,
     look: sceneOption.look,

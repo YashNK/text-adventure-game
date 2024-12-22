@@ -2,45 +2,33 @@ import sendResponse from "../utility/utility.js";
 import Story from "../model/story.js";
 import Character from "../model/character.js";
 import Chapter from "../model/chapter.js";
+import UserStory from "../model/userStory.js";
 import {
   CreateStoryResponse,
+  GetAllStoriesResponse,
   GetOneStoryResponse,
   UpdateStoryResponse,
 } from "../dto/story/index.js";
 
 export const getAllStories = async (req, res) => {
   try {
-    const stories = await Story.find().select("-_id");
+    const { userId } = req.params;
+    if (isNaN(userId)) {
+      return sendResponse(res, 400, "Invalid User ID. It should be a number");
+    }
+    const stories = await Story.find();
+    if (!stories) {
+      return sendResponse(res, 404, "Stories Not Found", null, 0);
+    }
+    const userStories = await UserStory.find({ userId: userId });
+    const response = GetAllStoriesResponse(stories, userStories);
     return sendResponse(
       res,
       200,
       "All Stories Fetched Successfully",
-      stories,
+      response,
       0
     );
-  } catch (error) {
-    return sendResponse(res, 400, "Server Error", null, 1, error.message);
-  }
-};
-
-export const getStoryById = async (req, res) => {
-  try {
-    const { id: storyId } = req.params;
-    if (isNaN(storyId)) {
-      return sendResponse(res, 400, "Invalid Story ID. It should be a number");
-    }
-    const story = await Story.findOne({ storyId });
-    if (!story) {
-      return sendResponse(res, 400, "Story Not Found");
-    }
-    const chapters = await Chapter.find({
-      chapterId: { $in: story.chapters },
-    }).select("chapterId title");
-    const characters = await Character.find({
-      characterId: { $in: story.characters },
-    }).select("characterId name");
-    const response = GetOneStoryResponse(story, chapters, characters);
-    return sendResponse(res, 200, "Story Fetched Successfully", response, 0);
   } catch (error) {
     return sendResponse(res, 400, "Server Error", null, 1, error.message);
   }
@@ -63,8 +51,8 @@ export const createStory = async (req, res) => {
     }
     const newStory = new Story(storyData);
     await newStory.save();
-    const storyResponse = CreateStoryResponse(newStory);
-    return sendResponse(res, 200, "Story created successfully", storyResponse);
+    const response = CreateStoryResponse(newStory);
+    return sendResponse(res, 200, "Story created successfully", response);
   } catch (error) {
     return sendResponse(res, 400, "Server Error", null, 1, error.message);
   }

@@ -3,6 +3,8 @@ import jwt from "jsonwebtoken";
 import User from "../model/user.js";
 import sendResponse from "../utility/utility.js";
 import UserStory from "../model/userStory.js";
+import Story from "../model/story.js";
+import { CurrentUserResponse, LoginResponse } from "../dto/user/index.js";
 
 export const registerUser = async (req, res) => {
   const { username, password } = req.body;
@@ -21,12 +23,15 @@ export const registerUser = async (req, res) => {
       password: hashedPassword,
     });
     await newUser.save();
-    const newUserChapter = new UserStory({
-      userId: newUser.userId,
-      chapterId: null,
-      characterId: null,
-    });
-    await newUserChapter.save();
+    const stories = await Story.find();
+    for (const story of stories) {
+      const newUserStory = new UserStory({
+        userId: newUser.userId,
+        storyId: story.storyId,
+        characterId: 0,
+      });
+      await newUserStory.save();
+    }
     return sendResponse(res, 201, "User registered successfully");
   } catch (error) {
     return sendResponse(
@@ -58,7 +63,8 @@ export const loginUser = async (req, res) => {
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "7d",
     });
-    return sendResponse(res, 200, "Login Successful", { token: token });
+    const response = LoginResponse(token, user);
+    return sendResponse(res, 200, "Login Successful", response);
   } catch (error) {
     return sendResponse(res, 400, "User login failed", null, 1, error.message);
   }
@@ -66,11 +72,18 @@ export const loginUser = async (req, res) => {
 
 export const getCurrentUser = async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).select("-password -_id");
+    const user = await User.findById(req.user.id);
     if (!user) {
       return sendResponse(res, 401, "User Not Found");
     }
-    return sendResponse(res, 200, "Current User Fetched Successfully", user, 0);
+    const response = CurrentUserResponse(user);
+    return sendResponse(
+      res,
+      200,
+      "Current User Fetched Successfully",
+      response,
+      0
+    );
   } catch (error) {
     return sendResponse(
       res,

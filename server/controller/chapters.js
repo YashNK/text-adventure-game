@@ -1,8 +1,8 @@
-import { CreateChapterResponse } from "../dto/chapter/index.js";
 import Chapter from "../model/chapter.js";
 import Level from "../model/level.js";
 import Story from "../model/story.js";
 import sendResponse from "../utility/utility.js";
+import { CreateAndUpdateChapterResponse } from "../dto/chapter/index.js";
 
 export const getChapters = async (req, res) => {
   try {
@@ -28,7 +28,8 @@ export const getChapters = async (req, res) => {
 export const createChapter = async (req, res) => {
   try {
     const { storyId } = req.params;
-    const { chapterTitle, chapterDescription, levels } = req.body;
+    const { chapterTitle, chapterDescription, levels, isCompleted, isActive } =
+      req.body;
     if (!chapterTitle || !chapterDescription) {
       return sendResponse(
         res,
@@ -64,19 +65,45 @@ export const createChapter = async (req, res) => {
       chapterId: newChapterId,
       chapterTitle,
       chapterDescription,
-      isCompleted: false,
-      isActive: true,
+      isCompleted,
+      isActive,
       levels: levels || [],
     });
     story.chapters.push(newChapter.chapterId);
     await story.save();
-    const response = CreateChapterResponse(newChapter);
+    const response = CreateAndUpdateChapterResponse(newChapter);
     return sendResponse(res, 201, "Chapter created successfully", response);
   } catch (error) {
     return sendResponse(
       res,
       400,
       "Failed to create chapter",
+      null,
+      1,
+      error.message
+    );
+  }
+};
+
+export const updateChapter = async (req, res) => {
+  try {
+    const { chapterId } = req.params;
+    const updateData = req.body;
+    const updatedChapter = await Chapter.findOneAndUpdate(
+      { chapterId: chapterId },
+      updateData,
+      { new: true, runValidators: true }
+    );
+    if (!updatedChapter) {
+      return sendResponse(res, 404, `Chapter with ID ${chapterId} not found`);
+    }
+    const response = CreateAndUpdateChapterResponse(updatedChapter);
+    return sendResponse(res, 200, "Chapter updated successfully", response);
+  } catch (error) {
+    return sendResponse(
+      res,
+      400,
+      "Failed to update chapter",
       null,
       1,
       error.message
