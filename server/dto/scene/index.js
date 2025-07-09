@@ -3,6 +3,9 @@ export const CreateAndUpdateSceneResponse = (scene) => {
     sceneId: scene.sceneId,
     sceneMessage: scene.sceneMessage,
     hasMonster: scene.hasMonster,
-    sceneOptions: scene.sceneOptions,
+    sceneOptionId: scene.sceneOptionId,
+    monsterName: scene.monsterName,
+    hasNextScene: scene.hasNextScene,
+    sceneResponseIds: scene.sceneResponseIds,
   };
 };

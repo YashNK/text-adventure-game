@@ -3,14 +3,14 @@ const sendResponse = (
   statusCode,
   message,
   data = null,
-  messageCode = 1,
+  showMessage = 1,
   errorMessage = null
 ) => {
   return res.status(statusCode).json({
     message,
     data,
     isSuccess: statusCode >= 200 && statusCode < 300,
-    messageCode,
+    showMessage,
     errorMessage,
   });
 };

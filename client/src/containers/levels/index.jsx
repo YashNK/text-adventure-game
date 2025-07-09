@@ -22,8 +22,9 @@ export const Levels = () => {
   const [levelData, setLevelData] = useState(LevelDataForm());
   const [command, setCommand] = useState("");
   const [conversationLog, setConversationLog] = useState([]);
-  const [loading, setIsLoading] = useState(true);
+  const [sceneIndex, setSceneIndex] = useState(3);
 
+  //Get Level and Character Details
   useEffect(() => {
     if (currentUser) {
       fetchData(`${apiRoutes.LEVEL}/${chapterId}`, "GET");
@@ -34,6 +35,7 @@ export const Levels = () => {
     }
   }, [currentUser]);
 
+  //Set level State
   useEffect(() => {
     if (levelApiData && isSuccess) {
       const updatedLevel = UpdateLevelData(levelApiData[0]);
@@ -42,14 +44,35 @@ export const Levels = () => {
   }, [isSuccess]);
 
   useEffect(() => {
-    if (levelData && levelData.scene.sceneMessage) {
-      setConversationLog([
-        ...conversationLog,
-        `Echo: ${levelData?.scene?.sceneMessage}`,
-      ]);
-      setIsLoading(false);
+    if (
+      levelData &&
+      levelData.sceneIds &&
+      levelData.sceneIds.length > sceneIndex &&
+      levelData.sceneIds[sceneIndex]
+    ) {
+      const currentScene = levelData.sceneIds[sceneIndex];
+      if (currentScene.sceneMessage) {
+        setConversationLog((prevLog) => [
+          ...prevLog,
+          `Echo: ${currentScene.sceneMessage}`,
+        ]);
+      }
+      console.log(currentScene);
+      if (
+        currentScene.sceneResponseIds &&
+        currentScene.sceneResponseIds.length > 0
+      ) {
+        currentScene.sceneResponseIds.map((res, resIndex) => (
+          <span onClick={() => setSceneIndex(res.nextSceneId)}>
+            {setConversationLog((prevLog) => [
+              ...prevLog,
+              `${resIndex + 1}: ${res.responseOption}`,
+            ])}
+          </span>
+        ));
+      }
     }
-  }, [levelData]);
+  }, [levelData, sceneIndex]);
 
   useEffect(() => {
     if (chatRef.current) {
@@ -62,14 +85,15 @@ export const Levels = () => {
 
   const handleDirectionCommand = (command, key) => {
     if (command.includes(key)) {
-      if (levelData.scene.sceneOptions?.[key]) {
+      if (levelData.sceneIds[sceneIndex].sceneOptionId?.[key]) {
         setConversationLog([
           ...conversationLog,
           `You: ${command}`,
           `Echo: You move ${key}.`,
         ]);
         const nextLevel = levelApiData.find(
-          (l) => l.levelId === levelData.scene.sceneOptions?.[key]
+          (l) =>
+            l.levelId === levelData.sceneIds[sceneIndex].sceneOptionId?.[key]
         );
         setLevelData(nextLevel);
       } else {
@@ -86,21 +110,15 @@ export const Levels = () => {
     const filteredCommand = command.toLowerCase().trim();
     if (filteredCommand && filteredCommand.includes("look")) {
       const lookMessage =
-        `Echo: ${levelData?.scene?.sceneOptions?.look}` ||
+        `Echo: ${levelData?.sceneIds[sceneIndex]?.sceneOptionId?.look}` ||
         "Echo: There's nothing to see here.";
       setConversationLog([...conversationLog, `You: ${command}`, lookMessage]);
     } else if (filteredCommand) {
-      if (levelData.scene && levelData.scene.hasMonster) {
+      if (levelData.scene && levelData.sceneIds[sceneIndex].hasMonster) {
         setConversationLog([
           ...conversationLog,
           `You: ${command}`,
           "Echo: A monster blocks your path. Use Attack to kill monster.",
-        ]);
-      } else if (levelData?.scene?.sceneOptions?.startNewChapter > 0) {
-        setConversationLog([
-          ...conversationLog,
-          `You: ${command}`,
-          `Echo: Chapter Completed`,
         ]);
       } else {
         if (
@@ -130,7 +148,7 @@ export const Levels = () => {
 
   return (
     <div className="level_container">
-      {isLoading || fetchCharacterLoading || loading ? (
+      {conversationLog.length === 0 ? (
         <Loader />
       ) : (
         <>

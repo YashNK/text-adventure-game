@@ -16,7 +16,18 @@ const sceneSchema = new mongoose.Schema(
     hasMonster: {
       type: Boolean,
     },
-    sceneOptions: {
+    monsterName: {
+      type: String,
+    },
+    hasNextScene: {
+      type: Boolean,
+    },
+    sceneResponseIds: {
+      type: Number,
+      ref: "Response",
+    },
+
+    sceneOptionId: {
       type: Number,
       ref: "SceneOption",
     },

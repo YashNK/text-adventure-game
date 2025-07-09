@@ -1,14 +1,19 @@
 import express from "express";
 import authenticateToken from "../middleware/auth.js";
-import { getUserCharacter, setUserCharacter } from "../controller/userStory.js";
+import {
+  CreateUserStory,
+  GetUserCharacter,
+  SetUserCharacter,
+} from "../controller/userStory.js";
 
 const router = express.Router();
 
-router.post("/user/:userId/set-character", authenticateToken, setUserCharacter);
+router.post("/user/:userId/set-character", authenticateToken, SetUserCharacter);
 router.get(
   "/users/:userId/story/:storyId/character",
   authenticateToken,
-  getUserCharacter
+  GetUserCharacter
 );
+router.post("/user/:userId", authenticateToken, CreateUserStory);
 
 export default router;

@@ -21,13 +21,13 @@ const storySchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    characters: [
+    characterIds: [
       {
         type: Number,
         ref: "Character",
       },
     ],
-    chapters: [
+    chapterIds: [
       {
         type: Number,
         ref: "Chapter",

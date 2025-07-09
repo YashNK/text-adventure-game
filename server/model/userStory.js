@@ -30,9 +30,20 @@ const userStorySchema = new mongoose.Schema(
         ref: "Item",
       },
     ],
+    currentCharacterXp: {
+      type: Number,
+    },
     currentCharacterHealth: {
       type: Number,
-      required: false,
+    },
+    currentCharacterAttackPower: {
+      type: Number,
+    },
+    currentCharacterDefense: {
+      type: Number,
+    },
+    currentCharacterMoney: {
+      type: Number,
     },
   },
   {

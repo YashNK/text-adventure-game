@@ -1,14 +1,15 @@
 import express from "express";
 import {
-  createLevel,
-  getLevelsByChapterId,
-  updateLevel,
+  CreateLevel,
+  GetLevelsByChapterId,
+  UpdateLevel,
 } from "../controller/level.js";
+import authenticateToken from "../middleware/auth.js";
 
 const router = express.Router();
 
-router.post("/:chapterId", createLevel);
-router.get("/:chapterId", getLevelsByChapterId);
-router.put("/:levelId", updateLevel);
+router.get("/:chapterId", authenticateToken, GetLevelsByChapterId);
+router.post("/:chapterId", CreateLevel);
+router.put("/:levelId", UpdateLevel);
 
 export default router;

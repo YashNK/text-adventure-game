@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useFetchApi } from "../../hooks/use-fetch-api";
 import { apiRoutes } from "../../constants/api-routes";
 import { useNavigate, useOutletContext, useParams } from "react-router-dom";
-import { showCharacter } from "../../utils/show-image";
+import { showCharacter } from "../../utils/show-data";
 import { createNewPath } from "../../utils";
 import { Page } from "../../constants/routes";
 import { CharactersSkeletonLoader } from "./characters-skeleton-loading";
@@ -40,7 +40,7 @@ export const Characters = () => {
 
   return (
     <div className="character_main_container">
-      <div className="pb-2">
+      <div className="pb-2 px-4">
         <div>Choose Your Character</div>
         <div>
           Each character has its own unique story, so choose wisely, your
@@ -63,12 +63,14 @@ export const Characters = () => {
                   <div className="card_image_container">
                     <img
                       className="card_image"
-                      src={showCharacter(char.avatar)}
+                      src={showCharacter(char.characterAvatar)}
                     />
                   </div>
-                  <div className="mb-2 text-center font_30">{char.name}</div>
+                  <div className="mb-2 text-center font_30">
+                    {char.characterName}
+                  </div>
                   <div className="character_description mb-2 text-center">
-                    {char.description}
+                    {char.characterDescription}
                   </div>
                   <div className="">
                     <span className="">Health:</span> {char.health}

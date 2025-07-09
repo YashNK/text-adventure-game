@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { DropDownArrow } from "../../assets/svgs/dropdown-arrow";
-import { showCharacter } from "../../utils/show-image";
+import { showCharacter } from "../../utils/show-data";
 import "./level-sidebar.scss";
 
 export const LevelSideBar = ({
@@ -53,15 +53,17 @@ export const LevelSideBar = ({
                   : "character_details_closed"
               }`}
             >
-              <div>Character Name: {UserCharacterData?.name}</div>
-              <div>Health: {UserCharacterData?.health}</div>
+              <div>Character Name: {UserCharacterData?.characterName}</div>
+              <div>Health: {UserCharacterData?.characterHealth}</div>
               <div>Attack Power: {UserCharacterData?.attackPower}</div>
               <div>Special Ability: {UserCharacterData?.specialAbility}</div>
-              <div>Character Description: {UserCharacterData?.description}</div>
+              <div>
+                Character Description: {UserCharacterData?.characterDescription}
+              </div>
               <div className="character_image_container">
                 <img
                   className="character_image"
-                  src={showCharacter(UserCharacterData?.avatar)}
+                  src={showCharacter(UserCharacterData?.characterAvatar)}
                 />
               </div>
             </div>
@@ -81,19 +83,19 @@ export const LevelSideBar = ({
           >
             <div className="tab_container">
               <div
-                onClick={() => setSelectedTab(0)}
+                onClick={() => setOpen((prev) => ({ ...prev, tab: 0 }))}
                 className={`tab_header ${open.tab === 0 ? "selected" : ""}`}
               >
                 Scene
               </div>
               <div
-                onClick={() => setSelectedTab(1)}
+                onClick={() => setOpen((prev) => ({ ...prev, tab: 1 }))}
                 className={`tab_header ${open.tab === 1 ? "selected" : ""}`}
               >
                 Inventory
               </div>
               <div
-                onClick={() => setSelectedTab(2)}
+                onClick={() => setOpen((prev) => ({ ...prev, tab: 2 }))}
                 className={`tab_header ${open.tab === 2 ? "selected" : ""}`}
               >
                 Stats

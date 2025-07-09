@@ -1,15 +1,18 @@
 export const GetAllStoriesResponse = (stories, userStories) => {
-  return stories.map((story, storyIndex) => {
-    const filteredUserStories = userStories.filter(
-      (userStory) => userStory.storyId === story.storyId
-    );
+  return stories.map((story) => {
+    const matchedUserStory = userStories
+      ? userStories.find((userStory) => userStory.storyId === story.storyId)
+      : null;
     return {
       storyId: story.storyId,
       storyTitle: story.storyTitle,
       storyDescription: story.storyDescription,
       storyImage: story.storyImage,
-      characterId: filteredUserStories[storyIndex].characterId,
-      itemIds: filteredUserStories[storyIndex].itemIds,
+      userSelectedCharacterId: matchedUserStory
+        ? matchedUserStory.characterId
+        : 0,
+      characterIds: story.characterIds,
+      chapterIds: story.chapterIds,
     };
   });
 };
@@ -30,21 +33,13 @@ export const GetOneStoryResponse = (story, chapters, characters) => {
   };
 };
 
-export const UpdateStoryResponse = (updatedStory) => {
-  return {
-    storyId: updatedStory.storyId,
-    storyTitle: updatedStory.storyTitle,
-    storyDescription: updatedStory.storyDescription,
-    characters: updatedStory.characters,
-    chapters: updatedStory.chapters,
-  };
-};
-
-export const CreateStoryResponse = (story) => {
+export const CreateAndUpdateStoryResponse = (story) => {
   return {
     storyId: story.storyId,
     storyTitle: story.storyTitle,
     storyDescription: story.storyDescription,
     storyImage: story.storyImage,
+    characterIds: story.characterIds,
+    chapterIds: story.chapterIds,
   };
 };

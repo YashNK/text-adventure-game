@@ -1,27 +1,34 @@
 import Scene from "../model/scene.js";
 import SceneOption from "../model/sceneOption.js";
-import Monster from "../model/monster.js";
 import sendResponse from "../utility/utility.js";
 import { CreateAndUpdateSceneOptionResponse } from "../dto/sceneOption/index.js";
+import Monster from "../model/monster.js";
 
-export const createSceneOption = async (req, res) => {
+export const CreateSceneOption = async (req, res) => {
   try {
     const { sceneId } = req.params;
-    const { look, west, north, east, attack, startNewChapter } = req.body;
+    const { look, west, north, east, attackMonsterId, searchItemId, flee } =
+      req.body;
     const scene = await Scene.findOne({ sceneId });
     if (!scene) {
       return sendResponse(res, 404, "Scene not found");
+    }
+    const monster = await Monster.findOne({ monsterId: attackMonsterId });
+    if (!monster) {
+      return sendResponse(res, 404, "Monster not found");
     }
     const newSceneOption = new SceneOption({
       look,
       west,
       north,
       east,
-      attack,
-      startNewChapter,
+      attackMonsterId,
+      searchItemId,
+      flee,
     });
     await newSceneOption.save();
-    scene.sceneOptions = newSceneOption.sceneOptionId;
+    scene.monsterName = monster.monsterName;
+    scene.sceneOptionId = newSceneOption.sceneOptionId;
     await scene.save();
     const response = CreateAndUpdateSceneOptionResponse(newSceneOption);
     return sendResponse(res, 201, "SceneOption created successfully", response);
@@ -37,7 +44,7 @@ export const createSceneOption = async (req, res) => {
   }
 };
 
-export const updateSceneOption = async (req, res) => {
+export const UpdateSceneOption = async (req, res) => {
   try {
     const { sceneOptionId } = req.params;
     const updateData = req.body;

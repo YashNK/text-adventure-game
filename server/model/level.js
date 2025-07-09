@@ -9,7 +9,7 @@ const levelSchema = new mongoose.Schema(
       type: Number,
       unique: true,
     },
-    levelTitle: {
+    levelLocation: {
       type: String,
       required: true,
     },
@@ -17,11 +17,25 @@ const levelSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    levelHint: {
+      type: String,
+    },
+    increaseXp: {
+      type: Number,
+    },
     isLastLevel: {
       type: Boolean,
       default: false,
     },
-    scene: [
+    nextChapterId: {
+      type: Number,
+      required: false,
+    },
+    levelImage: {
+      type: String,
+      required: false,
+    },
+    sceneIds: [
       {
         type: Number,
         ref: "Scene",

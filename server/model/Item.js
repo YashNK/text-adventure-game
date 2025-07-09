@@ -10,7 +10,7 @@ const itemSchema = new mongoose.Schema(
       unique: true,
     },
     itemName: {
-      type: string,
+      type: String,
       required: true,
       unique: true,
     },
@@ -23,16 +23,20 @@ const itemSchema = new mongoose.Schema(
       required: true,
     },
     healing: {
-      type: String,
+      type: Number,
       required: false,
     },
     strength: {
-      type: String,
+      type: Number,
       required: false,
     },
     magic: {
-      type: String,
+      type: Number,
       required: false,
+    },
+    sellingCost: {
+      type: Number,
+      required: true,
     },
   },
   {
@@ -43,5 +47,5 @@ const itemSchema = new mongoose.Schema(
 itemSchema.plugin(autoIncrement, {
   inc_field: "itemId",
 });
-const userCharacterChapter = mongoose.model("Item", itemSchema);
-export default userCharacterChapter;
+const Item = mongoose.model("Item", itemSchema);
+export default Item;

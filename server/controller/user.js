@@ -2,11 +2,9 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import User from "../model/user.js";
 import sendResponse from "../utility/utility.js";
-import UserStory from "../model/userStory.js";
-import Story from "../model/story.js";
 import { CurrentUserResponse, LoginResponse } from "../dto/user/index.js";
 
-export const registerUser = async (req, res) => {
+export const RegisterUser = async (req, res) => {
   const { username, password } = req.body;
   if (!username || !password) {
     return sendResponse(res, 400, "All fields are required");
@@ -21,17 +19,9 @@ export const registerUser = async (req, res) => {
     const newUser = new User({
       username: normalizedUsername,
       password: hashedPassword,
+      isNewUser: true,
     });
     await newUser.save();
-    const stories = await Story.find();
-    for (const story of stories) {
-      const newUserStory = new UserStory({
-        userId: newUser.userId,
-        storyId: story.storyId,
-        characterId: 0,
-      });
-      await newUserStory.save();
-    }
     return sendResponse(res, 201, "User registered successfully");
   } catch (error) {
     return sendResponse(
@@ -45,7 +35,7 @@ export const registerUser = async (req, res) => {
   }
 };
 
-export const loginUser = async (req, res) => {
+export const LoginUser = async (req, res) => {
   const { username, password } = req.body;
   if (!username || !password) {
     return sendResponse(res, 400, "All fields are required");
@@ -64,13 +54,13 @@ export const loginUser = async (req, res) => {
       expiresIn: "7d",
     });
     const response = LoginResponse(token, user);
-    return sendResponse(res, 200, "Login Successful", response);
+    return sendResponse(res, 200, "Login Successful", response, 0);
   } catch (error) {
     return sendResponse(res, 400, "User login failed", null, 1, error.message);
   }
 };
 
-export const getCurrentUser = async (req, res) => {
+export const GetCurrentUser = async (req, res) => {
   try {
     const user = await User.findById(req.user.id);
     if (!user) {
@@ -88,7 +78,7 @@ export const getCurrentUser = async (req, res) => {
     return sendResponse(
       res,
       400,
-      "Failed to get current user",
+      "Failed to fetch current user",
       null,
       1,
       error.message

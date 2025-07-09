@@ -2,34 +2,42 @@ import Chapter from "../model/chapter.js";
 import Level from "../model/level.js";
 import Story from "../model/story.js";
 import sendResponse from "../utility/utility.js";
-import { CreateAndUpdateChapterResponse } from "../dto/chapter/index.js";
+import {
+  CreateAndUpdateChapterResponse,
+  GetChaptersResponse,
+} from "../dto/chapter/index.js";
 
-export const getChapters = async (req, res) => {
+export const GetChapters = async (req, res) => {
   try {
     const { storyId } = req.params;
-    const story = await Story.findOne({ storyId }).select("chapters");
+    const story = await Story.findOne({ storyId });
     if (!story) {
       return sendResponse(res, 404, "Chapter not found");
     }
     const chapters = await Chapter.find({
-      chapterId: { $in: story.chapters },
-    }).select(
-      "chapterId chapterTitle chapterDescription isCompleted isActive levels"
-    );
-    if (chapters.length < 0) {
+      chapterId: { $in: story.chapterIds },
+    });
+    if (chapters.length === 0) {
       return sendResponse(res, 404, "No chapters found for this story.");
     }
-    sendResponse(res, 200, null, chapters, 0);
+    const response = GetChaptersResponse(chapters);
+    sendResponse(res, 200, "Fetched Chapters SuccessFully!", response, 0);
   } catch (error) {
     sendResponse(res, 400, "Failed to get chapters", null, 1, error.message);
   }
 };
 
-export const createChapter = async (req, res) => {
+export const CreateChapter = async (req, res) => {
   try {
     const { storyId } = req.params;
-    const { chapterTitle, chapterDescription, levels, isCompleted, isActive } =
-      req.body;
+    const {
+      chapterTitle,
+      chapterDescription,
+      levelIds,
+      isCompleted,
+      isActive,
+      chapterImage,
+    } = req.body;
     if (!chapterTitle || !chapterDescription) {
       return sendResponse(
         res,
@@ -41,35 +49,21 @@ export const createChapter = async (req, res) => {
     if (!story) {
       return sendResponse(res, 404, "Story not found");
     }
-    if (levels && levels.length > 0) {
-      const invalidLevels = [];
-      for (const levelId of levels) {
-        const isValidLevel = await Level.exists({ levelId });
-        if (!isValidLevel) {
-          invalidLevels.push(levelId);
-        }
-      }
-      if (invalidLevels.length > 0) {
-        return sendResponse(
-          res,
-          400,
-          `Invalid levelId(s): ${invalidLevels.join(", ")}`
-        );
-      }
+    const level = await Level.find({
+      levelId: { $in: levelIds },
+    });
+    if (level.length === 0 || level.length !== levelIds.length) {
+      return sendResponse(res, 404, "Level ID(s) not found");
     }
-    const maxChapter = await Chapter.findOne()
-      .sort({ chapterId: -1 })
-      .select("chapterId");
-    const newChapterId = maxChapter ? maxChapter.chapterId + 1 : 1;
     const newChapter = await Chapter.create({
-      chapterId: newChapterId,
       chapterTitle,
       chapterDescription,
       isCompleted,
       isActive,
-      levels: levels || [],
+      levelIds: levelIds || [],
+      chapterImage,
     });
-    story.chapters.push(newChapter.chapterId);
+    story.chapterIds.push(newChapter.chapterId);
     await story.save();
     const response = CreateAndUpdateChapterResponse(newChapter);
     return sendResponse(res, 201, "Chapter created successfully", response);
@@ -85,13 +79,37 @@ export const createChapter = async (req, res) => {
   }
 };
 
-export const updateChapter = async (req, res) => {
+export const UpdateChapter = async (req, res) => {
   try {
     const { chapterId } = req.params;
-    const updateData = req.body;
+    const {
+      chapterTitle,
+      chapterDescription,
+      levelIds,
+      isCompleted,
+      isActive,
+      chapterImage,
+    } = req.body;
+    const chapter = await Chapter.findOne({ chapterId });
+    if (!chapter) {
+      return sendResponse(res, 404, `Chapter with ID: ${chapterId} Not found`);
+    }
+    const level = await Level.find({
+      levelId: { $in: levelIds },
+    });
+    if (level.length === 0 || level.length !== levelIds.length) {
+      return sendResponse(res, 404, "Level ID(s) not found");
+    }
     const updatedChapter = await Chapter.findOneAndUpdate(
       { chapterId: chapterId },
-      updateData,
+      {
+        chapterTitle,
+        chapterDescription,
+        levelIds,
+        isCompleted,
+        isActive,
+        chapterImage,
+      },
       { new: true, runValidators: true }
     );
     if (!updatedChapter) {

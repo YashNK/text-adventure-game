@@ -68,10 +68,10 @@ html {
       transition: background-position 0.3s ease, color 0.3s ease;
       outline: none;
       border: none;
-    }
-    .primary_btn:hover {
-      background-position: left bottom;
-      color: var(--primaryColor);
+      &:hover {
+        background-position: left bottom;
+        color: var(--primaryColor);
+      }
     }
     .secondary_btn {
       background-color: transparent;
@@ -123,8 +123,14 @@ html {
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
+  opacity: 0 !important;
   background-color: var(--scrollbarBg);
 }
+
+::-webkit-scrollbar:hover {
+  opacity: 1;
+}
+
 ::-webkit-scrollbar-thumb {
   background: var(--primaryColor);
   border-radius: 10px;

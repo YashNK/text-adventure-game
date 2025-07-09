@@ -6,3 +6,8 @@
   overflow: auto;
   padding: 0px 30px;
 }
+@media (max-width: 750px) {
+  .main_container {
+    padding: 0px 10px;
+  }
+}

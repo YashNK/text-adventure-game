@@ -2,10 +2,18 @@ import Monster from "../model/monster.js";
 import sendResponse from "../utility/utility.js";
 import { CreateAndUpdateMonsterResponse } from "../dto/monster/index.js";
 
-export const createMonster = async (req, res) => {
+export const CreateMonster = async (req, res) => {
   try {
-    const { monsterName, monsterHealth, monsterDamage, attackMessage } =
-      req.body;
+    const {
+      monsterName,
+      monsterHealth,
+      monsterDamage,
+      attackMessage,
+      monsterAvatar,
+      rewardXp,
+      rewardMoney,
+      rewardItemId,
+    } = req.body;
     if (!monsterName || !monsterHealth || !monsterDamage || !attackMessage) {
       return sendResponse(
         res,
@@ -18,6 +26,10 @@ export const createMonster = async (req, res) => {
       monsterHealth,
       monsterDamage,
       attackMessage,
+      monsterAvatar,
+      rewardXp,
+      rewardMoney,
+      rewardItemId,
     });
     await newMonster.save();
     const response = CreateAndUpdateMonsterResponse(newMonster);
@@ -34,13 +46,31 @@ export const createMonster = async (req, res) => {
   }
 };
 
-export const updateMonster = async (req, res) => {
+export const UpdateMonster = async (req, res) => {
   try {
     const { monsterId } = req.params;
-    const updateData = req.body;
+    const {
+      monsterName,
+      monsterHealth,
+      monsterDamage,
+      attackMessage,
+      monsterAvatar,
+      rewardXp,
+      rewardMoney,
+      rewardItemId,
+    } = req.body;
     const updatedMonster = await Monster.findOneAndUpdate(
       { monsterId },
-      updateData,
+      {
+        monsterName,
+        monsterHealth,
+        monsterDamage,
+        attackMessage,
+        monsterAvatar,
+        rewardXp,
+        rewardMoney,
+        rewardItemId,
+      },
       { new: true, runValidators: true }
     );
     if (!updatedMonster) {

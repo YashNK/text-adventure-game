@@ -5,7 +5,8 @@ export const CreateAndUpdateSceneOptionResponse = (sceneOption) => {
     west: sceneOption.west,
     north: sceneOption.north,
     east: sceneOption.east,
-    monster: sceneOption.monster,
-    startNewChapter: sceneOption.startNewChapter,
+    attackMonsterId: sceneOption.attackMonsterId,
+    searchItemId: sceneOption.searchItemId,
+    flee: sceneOption.flee,
   };
 };

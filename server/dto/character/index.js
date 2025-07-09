@@ -1,11 +1,15 @@
-export const CreateAndUpdateCharacterResponse = (Character) => {
+export const CreateAndUpdateCharacterResponse = (character) => {
   return {
-    characterId: Character.characterId,
-    name: Character.name,
-    health: Character.health,
-    attackPower: Character.attackPower,
-    specialAbility: Character.specialAbility,
-    description: Character.description,
-    avatar: Character.avatar,
+    characterId: character.characterId,
+    characterName: character.characterName,
+    characterDescription: character.characterDescription,
+    characterClass: character.characterClass,
+    characterMoney: character.characterMoney,
+    characterXp: character.characterXp,
+    attackPower: character.attackPower,
+    characterHealth: character.characterHealth,
+    characterDefense: character.characterDefense,
+    specialAbility: character.specialAbility,
+    characterAvatar: character.characterAvatar,
   };
 };

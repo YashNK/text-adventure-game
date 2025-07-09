@@ -10,5 +10,6 @@ export const CurrentUserResponse = (user) => {
   return {
     userId: user.userId,
     username: user.username,
+    isNewUser: user.isNewUser,
   };
 };

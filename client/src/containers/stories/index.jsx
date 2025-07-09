@@ -5,14 +5,14 @@ import { apiRoutes } from "../../constants/api-routes";
 import { StoriesSkeletonLoader } from "./stories-skeleton-loader";
 import { Page } from "../../constants/routes";
 import { createNewPath } from "../../utils";
-import { showStory } from "../../utils/show-image";
-import I18 from "../../plugins/i18";
+import { showStory } from "../../utils/show-data";
 import "./stories.scss";
 
 export const Stories = () => {
   const navigate = useNavigate();
   const { currentUser } = useOutletContext();
   const { fetchData, isLoading, data: story } = useFetchApi();
+  const { fetchData: createUserStory } = useFetchApi();
   const [viewStoryDescription, setViewStoryDescription] = useState({
     show: false,
     storyId: 0,
@@ -25,13 +25,20 @@ export const Stories = () => {
   }, [currentUser]);
 
   const handleBeginJourney = (storyId, storyIndex) => {
-    if (story[storyIndex].characterId > 0) {
+    if (story[storyIndex].userSelectedCharacterId > 0) {
       navigate(
         createNewPath(Page.CHAPTERS, {
           storyId: storyId,
         })
       );
     } else {
+      createUserStory(
+        `${apiRoutes.USER_STORY}/user/${currentUser.userId}`,
+        "POST",
+        {
+          storyId: storyId,
+        }
+      );
       navigate(
         createNewPath(Page.CHARACTERS, {
           storyId: storyId,
@@ -42,16 +49,19 @@ export const Stories = () => {
 
   return (
     <div className="story_container">
-      <div className="pb-4">
-        <div>
-          <I18 tkey="WELCOME_TO_ECHO_VERSE" />!
-        </div>
-        <I18 tkey="STORIES_DESC" />
+      <div className="pb-4 px-5">
+        <div>Welcome to EchoVerse!</div>
+        This is where the magic begins. Choose your favorite story from our
+        collection, explore its description, and embark on your journey whenever
+        you're ready.
       </div>
-      <div className="flex_1_1_10 overflow-auto">
+      <div className="flex_1_1_10 overflow-auto px-5">
         {isLoading ? (
           <StoriesSkeletonLoader />
-        ) : story && story.length > 0 ? (
+        ) : story && story.length === 0 ? (
+          <div className="flex items-center justify-center h-full">No data</div>
+        ) : (
+          story &&
           story.map((s, storyIndex) => (
             <div
               key={s.storyId}
@@ -78,11 +88,9 @@ export const Stories = () => {
                   onClick={() => handleBeginJourney(s.storyId, storyIndex)}
                   className="primary_btn mr-3"
                 >
-                  {s.characterId <= 0 ? (
-                    <I18 tkey="BEGIN_YOUR_JOURNEY" />
-                  ) : (
-                    <I18 tkey="CONTINUE_JOURNEY" />
-                  )}
+                  {s.userSelectedCharacterId <= 0
+                    ? "Begin Your Journey"
+                    : "Continue Journey"}
                 </button>
                 <button
                   onClick={() =>
@@ -93,13 +101,11 @@ export const Stories = () => {
                   }
                   className="secondary_btn"
                 >
-                  <I18 tkey="VIEW_STORY_DESCRIPTION" />
+                  View Story Description
                 </button>
               </div>
             </div>
           ))
-        ) : (
-          <div className="flex items-center justify-center">No data</div>
         )}
       </div>
     </div>

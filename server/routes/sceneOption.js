@@ -1,12 +1,12 @@
 import express from "express";
 import {
-  createSceneOption,
-  updateSceneOption,
+  CreateSceneOption,
+  UpdateSceneOption,
 } from "../controller/sceneOption.js";
 
 const router = express.Router();
 
-router.post("/:sceneId", createSceneOption);
-router.put("/:sceneOptionId", updateSceneOption);
+router.post("/:sceneId", CreateSceneOption);
+router.put("/:sceneOptionId", UpdateSceneOption);
 
 export default router;

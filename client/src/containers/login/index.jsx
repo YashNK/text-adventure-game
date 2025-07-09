@@ -8,8 +8,8 @@ import { LocalStorageKeys } from "../../constants";
 import { EYE_OPEN } from "../../assets/svgs/eye-open";
 import { EYE_SLASHED } from "../../assets/svgs/eye-slashed";
 import LoginImage from "../../assets/images/login.webp";
-import I18, { i18Get } from "../../plugins/i18";
 import "./login.scss";
+import { toast } from "react-toastify";
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -22,6 +22,7 @@ export const Login = () => {
     if (data && data.token && isSuccess) {
       localStorage.setItem(LocalStorageKeys.TOKEN, data.token);
       navigate(Page.DASHBOARD);
+      toast.success(`Welcome ${data.username}`);
     }
   }, [data]);
 
@@ -56,11 +57,9 @@ export const Login = () => {
           }}
           className="w-[70%]"
         >
-          <div className="text-center text-xl">
-            <I18 tkey="WELCOME_TO_ECHO_VERSE" />
-          </div>
+          <div className="text-center text-xl">Welcome to EchoVerse</div>
           <div className="text-center pb-10 text-sm">
-            <I18 tkey="EMBARK_ON_AN_EPIC_ADVENTURE" />
+            Embark on an Epic Adventure
           </div>
           <div className="auth_input mb-8">
             <input
@@ -74,12 +73,10 @@ export const Login = () => {
               required
               value={loginForm.username}
             />
-            <label htmlFor="username">
-              <I18 tkey="USERNAME" />
-            </label>
+            <label htmlFor="username">Username</label>
             {invalid.username ? (
               <span className="invalid invalid_top_20 primary_color">
-                <I18 tkey="USERNAME_IS_REQUIRED" />
+                Username is required
               </span>
             ) : (
               ""
@@ -97,12 +94,10 @@ export const Login = () => {
                 setInvalid((prev) => ({ ...prev, password: false }));
               }}
             />
-            <label htmlFor="password">
-              <I18 tkey="PASSWORD" />
-            </label>
+            <label htmlFor="password">Password</label>
             {invalid.password ? (
               <span className="invalid invalid_top_20 primary_color">
-                <I18 tkey="PASSWORD_IS_REQUIRED" />
+                Password is required
               </span>
             ) : (
               ""
@@ -126,25 +121,23 @@ export const Login = () => {
                   <Loader />
                 </>
               ) : (
-                <span>
-                  <I18 tkey="LOGIN" />
-                </span>
+                <span>Login</span>
               )}
             </button>
           </div>
           <div className="text-center">
-            <I18 tkey="DO_NOT_HAVE_AN_ACCOUNT" />?{" "}
+            Do not have an account?{" "}
             <span
               className="auth_footer"
               onClick={() => navigate(Page.REGISTER)}
             >
-              <I18 tkey="REGISTER" />
+              Register
             </span>
           </div>
         </div>
       </div>
       <div className="auth_image_container">
-        <img src={LoginImage} alt={i18Get("LOGIN")} className="auth_image" />
+        <img src={LoginImage} alt="login" className="auth_image" />
       </div>
     </div>
   );

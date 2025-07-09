@@ -1,8 +1,13 @@
-.chapters_container {
-  &.disabled {
-    cursor: not-allowed !important;
-    background-color: var(--disabledSecondaryColor) !important;
-    border-color: var(--disabledPrimaryColor);
-    color: var(--gray);
+.chapters_card_container {
+  flex: 1 1 10px;
+  overflow: auto;
+  .chapters_card {
+    cursor: pointer;
+    &.disabled {
+      cursor: not-allowed !important;
+      background-color: var(--disabledSecondaryColor) !important;
+      border-color: var(--disabledPrimaryColor);
+      color: var(--gray);
+    }
   }
 }

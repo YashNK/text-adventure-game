@@ -25,9 +25,19 @@ const monsterSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    avatar: {
+    monsterAvatar: {
       type: String,
       required: false,
+    },
+    rewardXp: {
+      type: Number,
+      required: true,
+    },
+    rewardMoney: {
+      type: Number,
+    },
+    rewardItemId: {
+      type: Number,
     },
   },
   {

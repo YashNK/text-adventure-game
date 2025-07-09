@@ -28,7 +28,7 @@ export const useFetchApi = () => {
       });
       const response = await res.json();
       if (res.ok) {
-        if (response.messageCode === 1) {
+        if (response.showMessage === 1) {
           toast.success(response.message);
         }
         setData(response.data);

@@ -26,26 +26,30 @@ export const Chapters = () => {
   };
 
   return (
-    <div>
-      <div className="pb-3">Chapters:</div>
-      {isLoading ? (
-        <ChapterSkeletonLoading />
-      ) : (
-        chapters?.map((c) => (
-          <div
-            key={c.chapterId}
-            onClick={() => {
-              if (c.isActive) handleChapterSelect(c.chapterId);
-            }}
-            className={`chapters_container w-full p-5 mb-3 main_card_container cursor-pointer ${
-              c.isActive ? "" : "disabled"
-            }`}
-          >
-            <div className="">{c.chapterTitle}</div>
-            <div className="">{c.chapterDescription}</div>
-          </div>
-        ))
-      )}
+    <div className="flex_1_1_10 flex flex-col">
+      <div className="pb-3 px-5">Chapters:</div>
+      <div className="chapters_card_container px-5">
+        {isLoading ? (
+          <ChapterSkeletonLoading />
+        ) : chapters && chapters.length > 0 ? (
+          chapters?.map((c) => (
+            <div
+              key={c.chapterId}
+              onClick={() => {
+                if (c.isActive) handleChapterSelect(c.chapterId);
+              }}
+              className={`chapters_card p-5 mb-3 main_card_container ${
+                c.isActive ? "" : "disabled"
+              }`}
+            >
+              <div className="">{c.chapterTitle}</div>
+              <div className="">{c.chapterDescription}</div>
+            </div>
+          ))
+        ) : (
+          <div className="h-full flex items-center justify-center">No Data</div>
+        )}
+      </div>
     </div>
   );
 };

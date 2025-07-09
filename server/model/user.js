@@ -18,6 +18,9 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    isNewUser: {
+      type: Boolean,
+    },
   },
   {
     versionKey: false,

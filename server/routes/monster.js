@@ -1,9 +1,9 @@
 import express from "express";
-import { createMonster, updateMonster } from "../controller/monster.js";
+import { CreateMonster, UpdateMonster } from "../controller/monster.js";
 
 const router = express.Router();
 
-router.post("/", createMonster);
-router.put("/:monsterId", updateMonster);
+router.post("/", CreateMonster);
+router.put("/:monsterId", UpdateMonster);
 
 export default router;

@@ -1,21 +1,29 @@
-export const SetUserCharacterResponse = (userStory) => {
+export const UserStoryResponse = (userStory) => {
   return {
-    userStoryId: 6,
     userId: userStory.userId,
-    storyId: userStory.storyId,
     characterId: userStory.characterId,
+    storyId: userStory.storyId,
     itemIds: userStory.itemIds,
+    currentCharacterXp: userStory.currentCharacterXp,
+    currentCharacterHealth: userStory.currentCharacterHealth,
+    currentCharacterAttackPower: userStory.currentCharacterAttackPower,
+    currentCharacterDefense: userStory.currentCharacterDefense,
+    currentCharacterMoney: userStory.currentCharacterMoney,
   };
 };
 
-export const GetUserCharacterResponse = (character) => {
+export const UserCharacterResponse = (character, userStory) => {
   return {
     characterId: character.characterId,
-    name: character.name,
-    description: character.description,
-    health: character.health,
-    attackPower: character.attackPower,
+    characterName: character.characterName,
+    characterDescription: character.characterDescription,
+    characterClass: character.characterClass,
     specialAbility: character.specialAbility,
-    avatar: character.avatar,
+    characterAvatar: character.characterAvatar,
+    characterMoney: userStory.currentCharacterMoney,
+    characterXp: userStory.currentCharacterXp,
+    attackPower: userStory.currentCharacterAttackPower,
+    characterHealth: userStory.currentCharacterHealth,
+    characterDefense: userStory.currentCharacterDefense,
   };
 };

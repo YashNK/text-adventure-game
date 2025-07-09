@@ -25,12 +25,15 @@ const chapterSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
-    levels: [
+    levelIds: [
       {
         type: Number,
         ref: "Level",
       },
     ],
+    chapterImage: {
+      type: String,
+    },
   },
   {
     versionKey: false,

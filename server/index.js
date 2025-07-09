@@ -11,6 +11,8 @@ import sceneRoutes from "./routes/scene.js";
 import sceneOptionRoutes from "./routes/sceneOption.js";
 import monsterRoutes from "./routes/monster.js";
 import userChapterRoutes from "./routes/userStory.js";
+import itemRoutes from "./routes/item.js";
+import responseRoutes from "./routes/response.js";
 
 dotenv.config();
 const app = express();
@@ -39,6 +41,8 @@ app.use("/api/scene", sceneRoutes);
 app.use("/api/sceneOption", sceneOptionRoutes);
 app.use("/api/monster", monsterRoutes);
 app.use("/api/user-story", userChapterRoutes);
+app.use("/api/item", itemRoutes);
+app.use("/api/response", responseRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

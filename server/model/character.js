@@ -9,11 +9,19 @@ const characterSchema = new mongoose.Schema(
       type: Number,
       unique: true,
     },
-    name: {
+    characterName: {
       type: String,
       required: true,
     },
-    health: {
+    characterDescription: {
+      type: String,
+      required: true,
+    },
+    characterXp: {
+      type: Number,
+      required: true,
+    },
+    characterHealth: {
       type: Number,
       required: true,
     },
@@ -23,17 +31,21 @@ const characterSchema = new mongoose.Schema(
     },
     specialAbility: {
       type: String,
-      required: false,
-    },
-    description: {
-      type: String,
       required: true,
     },
-    class: {
+    characterDefense: {
+      type: Number,
+      required: true,
+    },
+    characterMoney: {
+      type: Number,
+      required: true,
+    },
+    characterClass: {
       type: String,
       require: true,
     },
-    avatar: {
+    characterAvatar: {
       type: String,
       required: false,
     },

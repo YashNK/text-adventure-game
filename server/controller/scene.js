@@ -1,36 +1,58 @@
 import Scene from "../model/scene.js";
 import Level from "../model/level.js";
-import SceneOption from "../model/sceneOption.js";
 import sendResponse from "../utility/utility.js";
 import { CreateAndUpdateSceneResponse } from "../dto/scene/index.js";
+import SceneOption from "../model/sceneOption.js";
+import Response from "../model/response.js";
 
-export const createScene = async (req, res) => {
+export const CreateScene = async (req, res) => {
   try {
     const { levelId } = req.params;
-    const { sceneMessage, sceneOptions, hasMonster } = req.body;
+    const {
+      sceneMessage,
+      sceneOptionId,
+      hasMonster,
+      monsterName,
+      hasNextScene,
+      sceneResponseIds,
+    } = req.body;
     const level = await Level.findOne({ levelId });
     if (!level) {
       return sendResponse(res, 404, "Level not found");
     }
-    const validSceneOptions = await SceneOption.find({
-      sceneOptionId: { $in: sceneOptions },
-    });
-
-    if (validSceneOptions.length !== sceneOptions.length) {
-      return sendResponse(res, 404, "One or more scene options do not exist");
+    if (!sceneOptionId) {
+      return sendResponse(res, 404, "SceneOptionId is required");
     }
-    const maxScene = await Scene.findOne()
-      .sort({ sceneId: -1 })
-      .select("sceneId");
-    const newSceneId = maxScene ? maxScene.sceneId + 1 : 1;
+    if (!sceneResponseIds) {
+      return sendResponse(res, 404, "SceneResponseIds is required");
+    }
+    const sceneOption = await SceneOption.findOne({ sceneOptionId });
+    if (!sceneOption) {
+      return sendResponse(
+        res,
+        404,
+        `SceneOption with ID: ${sceneOptionId} not found`
+      );
+    }
+    const sceneResponse = await Response.find({
+      responseId: { $in: sceneResponseIds },
+    });
+    if (
+      sceneResponse.length === 0 ||
+      sceneResponse.length !== sceneResponseIds.length
+    ) {
+      return sendResponse(res, 404, "Scene Response ID(s) not found");
+    }
     const newScene = new Scene({
-      sceneId: newSceneId,
       sceneMessage,
-      sceneOptions,
+      sceneOptionId,
       hasMonster,
+      monsterName,
+      hasNextScene: hasNextScene || sceneResponseIds.length > 0 ? true : false,
+      sceneResponseIds: sceneResponseIds || [],
     });
     await newScene.save();
-    level.scene = newSceneId;
+    level.sceneIds.push(newScene.sceneId);
     await level.save();
     const response = CreateAndUpdateSceneResponse(newScene);
     return sendResponse(res, 201, "Scene created successfully", response);
@@ -46,14 +68,59 @@ export const createScene = async (req, res) => {
   }
 };
 
-export const updateScene = async (req, res) => {
+export const UpdateScene = async (req, res) => {
   try {
     const { sceneId } = req.params;
-    const updateData = req.body;
-    const updatedScene = await Scene.findOneAndUpdate({ sceneId }, updateData, {
-      new: true,
-      runValidators: true,
+    const {
+      sceneMessage,
+      sceneOptionId,
+      hasMonster,
+      monsterName,
+      hasNextScene,
+      sceneResponseIds,
+    } = req.body;
+    const scene = await Scene.findOne({ sceneId });
+    if (!scene) {
+      return sendResponse(res, 404, `Scene with ID: ${sceneId} not found`);
+    }
+    if (!sceneOptionId) {
+      return sendResponse(res, 404, "SceneOptionId is required");
+    }
+    if (!sceneResponseIds) {
+      return sendResponse(res, 404, "SceneResponseIds is required");
+    }
+    const sceneOption = await SceneOption.findOne({ sceneOptionId });
+    if (!sceneOption) {
+      return sendResponse(
+        res,
+        404,
+        `SceneOption with ID: ${sceneOptionId} not found`
+      );
+    }
+    const sceneResponse = await Response.find({
+      responseId: { $in: sceneResponseIds },
     });
+    if (
+      sceneResponse.length === 0 ||
+      sceneResponse.length !== sceneResponseIds.length
+    ) {
+      return sendResponse(res, 404, "Scene Response ID(s) not found");
+    }
+    const updatedScene = await Scene.findOneAndUpdate(
+      { sceneId },
+      {
+        sceneMessage,
+        sceneOptionId,
+        hasMonster,
+        monsterName,
+        hasNextScene,
+        sceneResponseIds,
+      },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
     if (!updatedScene) {
       return sendResponse(res, 404, `Scene with ID ${sceneId} not found`);
     }

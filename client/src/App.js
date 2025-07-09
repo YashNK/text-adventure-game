@@ -14,12 +14,10 @@ function App() {
         transition={Slide}
         position="top-center"
         autoClose={1500}
-        limit={5}
-        hideProgressBar={true}
+        hideProgressBar={false}
         newestOnTop={false}
         closeOnClick
         pauseOnHover
-        draggable
         theme="colored"
       />
       <RouterProvider router={router} />

@@ -6,7 +6,6 @@ import { apiRoutes } from "../../constants/api-routes";
 import { Loader } from "../../components/loader";
 import { EYE_OPEN } from "../../assets/svgs/eye-open";
 import { EYE_SLASHED } from "../../assets/svgs/eye-slashed";
-import I18, { i18Get } from "../../plugins/i18";
 import RegisterImage from "../../assets/images/register.webp";
 
 export const Register = () => {
@@ -58,7 +57,7 @@ export const Register = () => {
       setInvalid((prev) => ({
         ...prev,
         password: true,
-        passwordMessage: i18Get("PASSWORD_DOES_NOT_MATCH"),
+        passwordMessage: "Password does not match",
       }));
       valid = false;
     }
@@ -66,7 +65,7 @@ export const Register = () => {
       setInvalid((prev) => ({
         ...prev,
         password: true,
-        passwordMessage: i18Get("PASSWORD_SPECIAL_CHARACTERS"),
+        passwordMessage: "Password should contain a special character",
       }));
       return false;
     }
@@ -74,7 +73,7 @@ export const Register = () => {
       setInvalid((prev) => ({
         ...prev,
         password: true,
-        passwordMessage: i18Get("PASSWORD_SHOULD_CONTAIN_A_NUMBER"),
+        passwordMessage: "Password should contain a number",
       }));
       valid = false;
     }
@@ -82,7 +81,7 @@ export const Register = () => {
       setInvalid((prev) => ({
         ...prev,
         password: true,
-        passwordMessage: i18Get("PASSWORD_SHOULD_CONTAIN_UPPERCASE"),
+        passwordMessage: "Password should contain a uppercase character",
       }));
       valid = false;
     }
@@ -90,7 +89,7 @@ export const Register = () => {
       setInvalid((prev) => ({
         ...prev,
         password: true,
-        passwordMessage: i18Get("PASSWORD_SHOULD_CONTAIN_LOWERCASE"),
+        passwordMessage: "Password should contain a lowercase character",
       }));
       valid = false;
     }
@@ -98,7 +97,7 @@ export const Register = () => {
       setInvalid((prev) => ({
         ...prev,
         password: true,
-        passwordMessage: i18Get("PASSWORD_SHOULD_CONTAIN_8"),
+        passwordMessage: "Password should contain 8 characters",
       }));
       valid = false;
     }
@@ -106,7 +105,7 @@ export const Register = () => {
       setInvalid((prev) => ({
         ...prev,
         password: true,
-        passwordMessage: i18Get("PASSWORD_IS_REQUIRED"),
+        passwordMessage: "Password is required",
       }));
       valid = false;
     }
@@ -118,7 +117,7 @@ export const Register = () => {
       <div className="auth_image_container">
         <img
           src={RegisterImage}
-          alt={i18Get("REGISTER")}
+          alt="Registration Image"
           className="auth_image"
         />
       </div>
@@ -129,12 +128,8 @@ export const Register = () => {
           }}
           className="w-[70%] my-auto"
         >
-          <div className="text-center text-xl">
-            <I18 tkey="REGISTER" />
-          </div>
-          <div className="text-center pb-10 text-sm">
-            <I18 tkey="START_YOUR_ADVENTURE" />
-          </div>
+          <div className="text-center text-xl">Register</div>
+          <div className="text-center pb-10 text-sm">Start your adventure</div>
           <div className="auth_input mb-8">
             <input
               type="text"
@@ -150,12 +145,10 @@ export const Register = () => {
               value={registerForm.username}
               required
             />
-            <label htmlFor="username">
-              <I18 tkey="USERNAME" />
-            </label>
+            <label htmlFor="username">Username</label>
             {invalid.username ? (
               <span className="invalid invalid_top_20 primary_color">
-                <I18 tkey="USERNAME_IS_REQUIRED" />
+                Username is required
               </span>
             ) : (
               ""
@@ -176,9 +169,7 @@ export const Register = () => {
               }}
               required
             />
-            <label htmlFor="password">
-              <I18 tkey="PASSWORD" />
-            </label>
+            <label htmlFor="password">Password</label>
             {invalid.password ? (
               <span className="invalid invalid_top_20 primary_color">
                 {invalid.passwordMessage}
@@ -213,12 +204,10 @@ export const Register = () => {
               }}
               required
             />
-            <label htmlFor="confirm-password">
-              <I18 tkey="CONFIRM_PASSWORD" />
-            </label>
+            <label htmlFor="confirm-password">Confirm Password</label>
             {invalid.confirmPassword ? (
               <span className="invalid invalid_top_20 primary_color">
-                <I18 tkey="PASSWORD_IS_REQUIRED" />
+                Password is required
               </span>
             ) : (
               ""
@@ -245,16 +234,14 @@ export const Register = () => {
                   <Loader />
                 </>
               ) : (
-                <span>
-                  <I18 tkey="REGISTER" />
-                </span>
+                <span>Register</span>
               )}
             </button>
           </div>
           <div className="text-center">
-            <I18 tkey="ALREADY_HAVE_AN_ACCOUNT" />?{" "}
+            Already have an account?{" "}
             <span className="auth_footer" onClick={() => navigate(Page.LOGIN)}>
-              <I18 tkey="LOGIN" />
+              Login
             </span>
           </div>
         </div>
